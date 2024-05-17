@@ -29,7 +29,8 @@ else
 
 
 @code {
-    private ApplicationUser user { get; set; } = null!;
+    [Parameter]
+    public ApplicationUser user { get; set; } = null!;
 
     [CascadingParameter]
     private HttpContext HttpContext { get; set; } = default!;

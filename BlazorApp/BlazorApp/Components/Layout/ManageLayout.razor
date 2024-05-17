@@ -6,11 +6,11 @@
     <section class="account-details-section">
         <div class="container">
             <aside>
-                <ProfileInfo />
-                @* <ManageNavMenu /> *@
+                <ProfileInfo user="user" />
             </aside>
 
             <div class="account-details">
+                @Body
             </div>
         </div>
     </section>
@@ -27,3 +27,8 @@
         </div>
     </div>
 </div> *@
+
+@code {
+    [CascadingParameter]
+    private ApplicationUser user { get; set; } = default!;
+}

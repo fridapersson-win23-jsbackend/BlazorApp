@@ -47,7 +47,7 @@ namespace BlazorApp.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("BlazorApp.Data.ApplicationUser", b =>

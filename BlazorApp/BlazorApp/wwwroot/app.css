@@ -2221,6 +2221,7 @@ aside .profile-info nav {
 }
 aside .profile-info nav .active {
   background: var(--color-theme);
+  color: var(--color-white);
 }
 @media (min-width: 992px) {
   aside .profile-info nav .btn-theme-s {
@@ -2242,6 +2243,10 @@ aside .profile-info nav .btn-transparent {
   color: var(--color-gray-800);
   font-weight: 700;
   margin-left: 1.3rem;
+  text-align: left;
+}
+aside .profile-info nav .btn-transparent:hover {
+  background: var(--color-gray-500);
 }
 @media (min-width: 1400px) {
   aside .profile-info nav .btn-transparent {

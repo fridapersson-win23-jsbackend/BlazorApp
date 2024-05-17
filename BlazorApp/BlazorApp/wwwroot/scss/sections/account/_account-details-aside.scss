@@ -90,9 +90,10 @@ aside {
             flex-direction: column;
             gap: 1rem;
             text-align: left;
-
+            
             .active {
                 background: var(--color-theme);
+                color: var(--color-white);
             }
 
             .btn-theme-s {
@@ -114,6 +115,11 @@ aside {
                 color: var(--color-gray-800);
                 font-weight: 700;
                 margin-left: 1.3rem;
+                text-align: left;
+
+                &:hover {
+                    background: var(--color-gray-500);
+                }
 
                 @include xxl {
                     margin-left: 1.6rem;

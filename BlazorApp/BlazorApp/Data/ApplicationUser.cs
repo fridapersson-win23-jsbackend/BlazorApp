@@ -24,9 +24,16 @@ namespace BlazorApp.Data
     public class AddressEntity
     {
         public int Id { get; set; }
+
+        [Required]
         public string AddressLine_1 { get; set; } = null!;
+
         public string? AddressLine_2 { get; set; }
+
+        [Required]
         public string PostalCode { get; set; } = null!;
+
+        [Required]
         public string City { get; set; } = null!;
     }
 }
