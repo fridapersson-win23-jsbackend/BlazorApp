@@ -1,0 +1,29 @@
+.box-content {
+    color: var(--color-gray-900);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    @include md {
+        text-align: start;
+    }
+
+    .boxes {
+        display: grid;
+        gap: 1.5rem 1rem;
+        position: relative;
+
+        @include md {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        @include lg {
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 1rem .7rem;
+        }
+
+        /*@import "_course-card.scss";*/
+    }
+}

@@ -1,0 +1,103 @@
+.light-dark {
+    background: linear-gradient(to right, var(--color-black) 50%, var(--color-white) 50%);
+
+    .container {
+        position: relative;
+
+        .content {
+            h3 {
+                margin-left: 1rem;
+                @include h6;
+                color: var(--color-white);
+                text-align: center;
+                padding-top: 2rem;
+                margin-bottom: 2rem;
+
+
+                @include md {
+                    @include h2;
+                    color: var(--color-white);
+                    margin-left: 1.5rem;
+                    padding-top: 2rem;
+                    margin-bottom: 0;
+                }
+
+                span {
+                    margin-left: 1rem;
+                    color: var(--color-black);
+                }
+            }
+
+            .divider {
+                display: grid;
+                grid-template-columns: auto auto;
+                height: 500px;
+
+                @include md {
+                    height: 500px;
+                }
+
+                @include lg {
+                    height: 700px;
+                }
+
+                @include xl {
+                    height: 750px;
+                }
+            }
+
+            .image {
+                img {
+                    position: absolute;
+                    width: 100%;
+                    top: 50%;
+                    right: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+
+                    @include md {
+                        width: 80%;
+                    }
+
+                    @include lg {
+                        width: 85%;
+                    }
+
+                    @include xl {
+                        height: 60%;
+                    }
+                }
+            }
+
+            .slider {
+                position: absolute;
+                width: 2px;
+                height: 100%;
+                top: 0;
+                left: 50%;
+                transform: translate(-50%);
+                background-color: var(--color-theme);
+
+                &::before {
+                    content: "";
+                    width: 30px;
+                    aspect-ratio: 1;
+                    background-color: inherit;
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    border-radius: 50%;
+                }
+
+                .fa-arrows-left-right {
+                    position: absolute;
+                    top: 50%;
+                    left: 50%;
+                    transform: translate(-50%, -50%);
+                    color: var(--color-gray-000);
+                }
+            }
+        }
+    }
+}

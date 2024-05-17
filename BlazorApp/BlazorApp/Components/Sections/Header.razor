@@ -1,0 +1,74 @@
+﻿<header>
+    <div class="container" id="container">
+
+        <a href="/" id="logo">
+            @* <img src="./images/@(isDark ? "silicon-logo-dark-theme.svg" : "silicon-logo-light-theme.svg")" alt="silicon logotype" /> *@
+            <img src="./images/silicon-logo-light-theme.svg" alt="silicon logotype" />
+
+        </a>
+
+        @* hide menu options *@
+        <div id="menu" class="nav">
+            <nav class="nav">
+                <NavLink href="/" class="menu-link">Overview</NavLink>
+
+
+                <AuthorizeView>
+                    <Authorized>
+                        <NavLink href="/courses" class="menu-link">Courses</NavLink>
+                    </Authorized>
+                    <NotAuthorized>
+                        <NavLink href="#features" class="menu-link">Features</NavLink>
+                    </NotAuthorized>
+                </AuthorizeView>
+
+                <NavLink href="/contact" class="menu-link">Contact</NavLink>
+
+
+                @*@if(User.IsInRole("Admin"))
+                {
+                <NavLink class="menu-link" asp-controller="Admin" asp-action="Index" asp-fragment="courses">Admin Portal</NavLink>
+                } *@
+            </nav>
+        </div>
+
+        <div id="btn-switch" class="btn-switch hide">
+            <span class="color-theme">Light</span>
+            <label class="switch" for="switch-mode">
+                <input type="checkbox" id="switch-mode" checked="@isDark" />
+                <span class="slider round"></span>
+            </label>
+            <label class="color-theme">Dark</label>
+        </div>
+
+
+        <div id="account-buttons" class="account-buttons hide">
+            <AuthorizeView>
+                <Authorized>
+                    <a href="/account/manage" asp-controller="Account" asp-action="Details">
+                        <img src="/uploads/no-profile-img.png" alt="Default img" )´s profile picture" class="no-profile-img" />
+                    </a>
+                </Authorized>
+                <NotAuthorized>
+                    <a href="/account/login" class="btn-gray"><i class="fa-solid fa-arrow-right-to-bracket"></i>Sign In</a>
+                    <a href="/account/register" class="btn-theme"><i class="fa-solid fa-user"></i>Sign Up</a>
+                </NotAuthorized>
+            </AuthorizeView>
+
+            @*              <NavLink href="/account/details" asp-controller="Account" asp-action="Details">
+            <img src="~/uploads/@user.ProfileImgUrl" class="profile-img" />
+            </NavLink>  *@
+
+        </div>
+
+        @*         <button class="btn-mobile" onclick="toggleMenu()">
+        <i id="mobile-icon" class="fa-solid fa-bars"></i>
+        </button> *@
+    </div>
+
+</header>
+
+@code {
+    private bool isDark = false;
+
+}

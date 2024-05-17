@@ -1,0 +1,73 @@
+﻿<section id="@workToolsModel.Id" class="work-tools">
+    <div class="container">
+        <div class="work-tools-header">
+            <h2>@workToolsModel.Title </h2>
+            <p>@workToolsModel.Description</p>
+        </div>
+        <div class="tools">
+
+            @foreach (var box in workToolsModel.WorkToolBox!)
+            {
+                <NavLink href="#">
+                    <div class="box">
+                        <img src="@box.FeaturesImg.ImageUrl" alt="@box.FeaturesImg.AltText" />
+                        <p>@box.FeaturesDescription</p>
+                    </div>
+                </NavLink>
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private WorkToolsModel workToolsModel = new WorkToolsModel
+        {
+
+            Id = "workTools",
+            Title = "Integrate Top Work Tools",
+            Description = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin volutpat mollis egestas. Nam luctus facilisis ultrices. Pellentesque volutpat ligula est. Mattis fermentum, at nec lacus.",
+            WorkToolBox =
+                    [
+                    new()
+                    {
+                        FeaturesDescription = "Lorem magnis pretium sed curabitur nunc facilisi nunc cursus sagittis.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/google.svg", AltText = "google-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "In eget a mauris quis. Tortor dui tempus quis integer est sit natoque placerat dolor.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/zoom.svg", AltText = "zoom-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "Id mollis consectetur congue egestas egestas suspendisse blandit justo.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/slack.svg", AltText = "slack-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "Rutrum interdum tortor, sed at nulla. A cursus bibendum elit purus cras praesent.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/gmail.svg", AltText = "gmail-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "Congue pellentesque amet, viverra curabitur quam diam scelerisque fermentum urna.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/trello.svg", AltText = "trello-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "A elementum, imperdiet enim, pretium etiam facilisi in aenean quam mauris.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/MailChimp.svg", AltText = "mailchimp-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "Ut in turpis consequat odio diam lectus elementum. Est faucibus blandit platea.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/dropbox.svg", AltText = "dropbox-icon" },
+                    },
+                    new()
+                    {
+                        FeaturesDescription = "Faucibus cursus maecenas lorem cursus nibh. Sociis sit risus id. Sit facilisis dolor arcu.",
+                        FeaturesImg = new() { ImageUrl = "./images/home/work-tools/evernote.svg", AltText = "evernote-icon" },
+                    },
+            ]
+        };
+}

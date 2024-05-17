@@ -1,0 +1,15 @@
+﻿@using BlazorApp.Data
+@using Microsoft.AspNetCore.Identity
+
+
+@inject NavigationManager NavigationManager
+
+
+@page "/signout";
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await SignInManager.SignOutAsync();
+        NavigationManager.NavigateTo("/");
+    }
+}

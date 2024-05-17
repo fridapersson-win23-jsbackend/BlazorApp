@@ -1,0 +1,85 @@
+.features {
+    color: var(--color-gray-800);
+    background: var(--color-gray-100);
+    padding: 5rem 0;
+
+    @include lg {
+        padding: 7rem 0;
+    }
+
+    .container {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        text-align: center;
+
+
+        h1 {
+            @include md {
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        p {
+            @include md {
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        .tool-features {
+            margin-top: 2rem;
+            display: grid;
+            grid-template-columns: auto auto;
+
+            @include lg {
+                grid-template-columns: auto auto auto;
+            }
+
+            .box {
+                padding: 2rem;
+                border: solid 1px var(--color-gray-300);
+                transition: ease-in-out;
+                border-radius: 0;
+                cursor: pointer;
+
+                @include lg {
+                    &:hover {
+                        border-radius: .4rem;
+                        background-color: var(--color-gray-300);
+                    }
+
+                    &:nth-child(1) {
+                        border: none;
+                        border-bottom: solid 1px var(--color-gray-300);
+                        border-right: solid 1px var(--color-gray-300);
+                    }
+
+                    &:nth-child(2) {
+                        border: none;
+                        border-right: solid 1px var(--color-gray-300);
+                        border-bottom: solid 1px var(--color-gray-300);
+                    }
+
+                    &:nth-child(3) {
+                        border: none;
+                        border-bottom: solid 1px var(--color-gray-300);
+                    }
+
+                    &:nth-child(4) {
+                        border: none;
+                        border-right: solid 1px var(--color-gray-300);
+                    }
+
+                    &:nth-child(5) {
+                        border: none;
+                        border-right: solid 1px var(--color-gray-300);
+                    }
+
+                    &:nth-child(6) {
+                        border: none;
+                    }
+                }
+            }
+        }
+    }
+}

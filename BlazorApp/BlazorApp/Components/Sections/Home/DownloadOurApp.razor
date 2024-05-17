@@ -1,0 +1,94 @@
+﻿<section id="@downloadModel.Id" class="download">
+    <div class="container">
+        <div class="app-img-container">
+            <img class="app-img" src="@downloadModel.Image.ImageUrl" alt="@downloadModel.Image.AltText" />
+        </div>
+        <div class="downloads">
+            <h2>@downloadModel.Title</h2>
+            <div class="content">
+                <div class="app-store">
+                    <div class="app-store-content">
+                        <p>@downloadModel.Apple</p>
+                        <div class="stars">
+                            @if(downloadModel.AppleRating.HasValue)
+                            {
+                                for(int i = 0; i < downloadModel.AppleRating.Value; i++)
+                                {
+                                    <i class="fa-sharp fa-solid fa-star"></i>
+
+                                }
+                            }
+                        </div>
+                        <h5>@downloadModel.BoxModels![0].FeaturesTitle</h5>
+                        <p class="rating">@downloadModel.BoxModels[0].FeaturesDescription</p>
+                    </div>
+
+                    <div class="img-container">
+                        <a href="https://www.appstore.com" target="_blank">
+                            <img src="@downloadModel.BoxModels[0].FeaturesImg.ImageUrl" alt="@downloadModel.BoxModels[0].FeaturesImg.AltText" />
+                        </a>
+                    </div>
+                </div>
+
+                <div class="google-play">
+                    <div class="google-play-content">
+                        <p>@downloadModel.Google</p>
+                        <div class="stars">
+                            @if (downloadModel.GoogleRating.HasValue)
+                            {
+                                for (int i = 0; i < downloadModel.GoogleRating.Value; i++)
+                                {
+                                    <i class="fa-sharp fa-solid fa-star"></i>
+
+                                }
+                            }
+                        </div>
+                        <h5>@downloadModel.BoxModels![1].FeaturesTitle</h5>
+                        <p class="rating">@downloadModel.BoxModels[1].FeaturesDescription</p>
+                    </div>
+
+                    <div class="img-container">
+                        <a href="https://www.googleplay.com" target="_blank">
+                            <img src="@downloadModel.BoxModels[1].FeaturesImg.ImageUrl" alt="@downloadModel.BoxModels[1].FeaturesImg.AltText" />
+                        </a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</section>
+
+
+@code {
+    private DownloadOurAppModel downloadModel = new DownloadOurAppModel
+        {
+            Id = "downloadOurApp",
+            Title = "Download Our App for Any Devices:",
+            Image = new ImageModel
+            {
+                ImageUrl = "./images/home/download-app/download.svg",
+                AltText = "download app image"
+            },
+            Apple = "Apple Store",
+            Google = "Google Play",
+            AppleRating = 5,
+            GoogleRating = 5,
+            BoxModels = new List<FeatureBoxModel>
+        {
+            new FeatureBoxModel
+            {
+                FeaturesImg = new () { ImageUrl = "./images/home/download-app/appstore.svg", AltText = "App Store image" },
+                FeaturesTitle = "Editor's Choice",
+                FeaturesDescription = "rating 4.7, 187K+ reviews"
+            },
+            new FeatureBoxModel
+            {
+                FeaturesImg = new ImageModel { ImageUrl = "./images/home/download-app/googleplay.svg", AltText = "Google Play image" },
+                FeaturesTitle = "App of the Day",
+                FeaturesDescription = "rating 4.8, 30K+ reviews"
+            }
+        }
+        };
+}

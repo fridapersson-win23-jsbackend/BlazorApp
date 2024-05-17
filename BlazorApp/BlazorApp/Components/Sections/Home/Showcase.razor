@@ -1,0 +1,50 @@
+﻿
+
+
+<section id="@showcase.Id" class="showcase">
+    <img class="background-image" src="@showcase.Image!.ImageUrl" alt="@showcase.Image.AltText" />
+    <div class="container">
+        <div class="content">
+            <h1>@showcase.Title</h1>
+            <p class="showcaseDescription">@showcase.Description</p>
+            <a href="/getstarted" class="btn-theme-s">@showcase.Link!.Text</a>
+            <h6>@showcase.BrandsText</h6>
+            <div class="brands">
+
+                @if (showcase.BrandImages != null)
+                {
+                    foreach (var brandImg in showcase.BrandImages)
+                    {
+                        <img src="@brandImg.ImageUrl" alt="@brandImg.AltText" />
+                    }
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private ShowcaseModel showcase = new ShowcaseModel
+        {
+            Id = "showcase",
+            Title = "Task Management Assistant You Gonna Love",
+            Description = "We offer you a new generation of task management system. Plan, manage & track all your tasks in one flexible tool.",
+            Image = new ImageModel
+            {
+                ImageUrl = "./images/showcase-taskmanager.svg",
+                AltText = "Showcase image"
+            },
+            Link = new LinkModel
+            {
+                Text = "Get Started for free",
+            },
+            BrandsText = "Largest companies use our tool to work efficiently",
+            BrandImages = new List<ImageModel>
+            {
+                new ImageModel { ImageUrl = "./images/brands/brand_1.svg", AltText = "Brand 1" },
+                new ImageModel { ImageUrl = "./images/brands/brand_2.svg", AltText = "Brand 2" },
+                new ImageModel { ImageUrl = "./images/brands/brand_3.svg", AltText = "Brand 3" },
+                new ImageModel { ImageUrl = "./images/brands/brand_4.svg", AltText = "Brand 4" }
+            }
+        };
+}

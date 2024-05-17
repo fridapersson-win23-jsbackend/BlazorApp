@@ -1,0 +1,71 @@
+﻿<section id="@featureModel.Id" class="features">
+    <div class="container">
+        <h1>@featureModel.Title</h1>
+        <p>@featureModel.Description</p>
+        <div class="tool-features">
+
+            @if (featureModel.FeaturesBox != null)
+            {
+                foreach (var boxModel in featureModel.FeaturesBox)
+                {
+                    //ändrar bildernas färg när temat ändras
+                    var imagePath = @* themeMode == "dark" ? boxModel.FeaturesImg.ImageUrl.Replace(".svg", "_dark.svg") : *@ boxModel.FeaturesImg.ImageUrl;
+
+                    <div class="box">
+                        <img src=@imagePath alt=@boxModel.FeaturesImg.AltText ="@boxModel.FeaturesImg.AltText" class="features-icon" />
+                        <h5>@boxModel.FeaturesTitle</h5>
+                        <p>@boxModel.FeaturesDescription</p>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+</section>
+
+@code {
+    private FeaturesModel featureModel = new FeaturesModel
+        {
+            Id = "features",
+            Title = "What Do You Get with Our Tool?",
+            Description = "Make sure all your tasks are organized so you can set the priorities and focus on important.",
+            FeaturesBox =
+            [
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/chat.svg", AltText = "Chat-icon" },
+                        FeaturesTitle = "Comments on Tasks",
+                        FeaturesDescription = "Id mollis consectetur congue egestas egestas suspendisse blandit justo."
+                    },
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/presentation.svg", AltText = "Presentation-icon" },
+                        FeaturesTitle = "Tasks Analytics",
+                        FeaturesDescription = "Non imperdiet facilisis nulla tellus Morbi scelerisque eget adipiscing vulputate."
+                    },
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/add-group.svg", AltText = "add-group-icon" },
+                        FeaturesTitle = "Multiple Assignees",
+                        FeaturesDescription = "A elementum, imperdiet enim, pretium etiam facilisi in aenean quam mauris."
+                    },
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/bell.svg", AltText = "Bell-icon" },
+                        FeaturesTitle = "Notifications",
+                        FeaturesDescription = "Diam, suspendisse velit cras ac. Lobortis diam volutpat, eget pellentesque viverra."
+                    },
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/tests.svg", AltText = "test-icon" },
+                        FeaturesTitle = "Sections & Subtasks",
+                        FeaturesDescription = "Mi feugiat hac id in. Sit elit placerat lacus nibh lorem ridiculus lectus."
+                    },
+                    new()
+                    {
+                        FeaturesImg = new() { ImageUrl = "./images/Home/features/shield.svg", AltText = "shield-icon" },
+                        FeaturesTitle = "Data Security",
+                        FeaturesDescription = "Aliquam malesuada neque eget elit nulla vestibulum nunc cras."
+                    },
+        ]
+        };
+}

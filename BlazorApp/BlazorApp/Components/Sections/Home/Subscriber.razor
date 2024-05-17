@@ -1,0 +1,173 @@
+﻿@rendermode InteractiveServer
+@inject HttpClient Http
+
+
+<section id="news-letter" class="news-letter">
+    <div class="container">
+        <div class="header">
+            <h2>Don't Want to Miss Anything?</h2>
+            <img class="background-line" src="./images/home/background-line.svg" />
+        </div>
+
+        <div class="content">
+            <div class="content-box">
+                <EditForm FormName="subscribeform" Model="SubscribeForm" OnValidSubmit="OnValidSubmit" novalidate method="post">
+                    <DataAnnotationsValidator />
+                    <div class="header-checkbox">
+                        <div class="sign-up">
+                            <h5>Sign up for Newsletters</h5>
+                        </div>
+                        <div class="box-container">
+                            <div class="box">
+                                <InputCheckbox @bind-Value="SubscribeForm.DailyNewsletter" id="c-box-1" />
+                                <label for="c-box-1">Daily Newsletter</label>
+                            </div>
+
+                            <div class="box">
+                                <InputCheckbox @bind-Value="@SubscribeForm.AdvertisingUpdates" id="c-box-2" />
+                                <label for="c-box-2">AdvertisingUpdates</label>
+                            </div>
+
+                            <div class="box">
+                                <InputCheckbox @bind-Value="@SubscribeForm.WeekInReview" id="c-box-3" />
+                                <label for="c-box-3">WeekInReview</label>
+                            </div>
+
+                            <div class="box">
+                                <InputCheckbox @bind-Value="@SubscribeForm.EventUpdates" id="c-box-4" />
+                                <label for="c-box-4">EventUpdates</label>
+                            </div>
+
+                            <div class="box">
+                                <InputCheckbox @bind-Value="@SubscribeForm.StartupsWeekly" id="c-box-5" />
+                                <label for="c-box-5">StartupsWeekly</label>
+                            </div>
+
+                            <div class="box">
+                                <InputCheckbox @bind-Value="@SubscribeForm.Podcasts" id="c-box-6" />
+                                <label for="c-box-6">Podcasts</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-container">
+                        <i class="fa-sharp fa-regular fa-envelope"></i>
+                        <InputText @bind-Value="SubscribeForm.Email" type="email" placeholder="Your Email"/>
+                        @* <span class="error" asp-validation-for="@SubscribeForm.Email"></span> *@
+                        <button type="submit" class="btn-theme">Subscribe *</button>
+                    </div>
+
+                    <ValidationMessage For="@(() => SubscribeForm.Email)"></ValidationMessage>
+
+                </EditForm>
+            </div>
+        </div>
+
+
+        <span class="info">
+@*             @if (!string.IsNullOrEmpty(StatusMessage))
+            {
+                <p><span class="alert-success alert-message">You are now a subscriber</span></p>
+            } *@
+            @* else if (TempData["Status"]?.ToString() == "AlreadyExists")
+            {
+                <p><span class="alert-warning alert-message">You are already subscribing</span></p>
+
+            }
+            else if (TempData["Status"]?.ToString() == "Invalid")
+            {
+                <p><span class="alert-danger alert-message">You have to enter a valid email address</span></p>
+            }
+            else if (TempData["Status"]?.ToString() == "ConnectionFailed")
+            {
+                <p><span class="alert-danger alert-message">Unable to connect to the server. Try again later</span></p>
+            }
+            else if (TempData["Status"]?.ToString() == "Unauthorized")
+            {
+                <p><span class="alert-danger alert-message">Something went wrong, please contact web admin</span></p>
+            } *@
+@*             else
+            { *@
+                <p><span class="asterix">*</span> Yes, I agree to the <a href="#">terms</a> and <a href="#">privacy policy</a>.</p>
+            @* } *@
+            <span class="alert-danger-dark">@StatusMessage</span>
+
+        </span>
+    </div>
+</section>
+
+@code {
+    // private SubscriberModel subscribeModel = new SubscriberModel
+    // {
+    //     Id = "subscribe",
+    //     Title = "Don't Want to Miss Anything?",
+    //     Image = new ImageModel { ImageUrl = "./images/home/background-line.svg", AltText = "Background image" },
+    //     Description = "Sign up for Newsletters",
+    //     AgreeToTerms = new LinkModel { Text = "terms" },
+    //     PrivacyPolicy = new LinkModel { Text = "privacy policy" },
+
+    // };
+
+    [SupplyParameterFromQuery]
+    public string StatusMessage { get; set; } = null!;
+
+
+    [SupplyParameterFromForm]
+    public SubscriberFormModel SubscribeForm { get; set; } = new SubscriberFormModel();
+
+    private async Task ResetStatusMessage()
+    {
+        
+    }
+
+
+    private async Task OnValidSubmit()
+    {
+        try
+        {
+            var result = await Http.PostAsJsonAsync("https://subscribeprovider-silicon.azurewebsites.net/api/Subscribe?code=nF6-myclvmiyagMfBsA1zJ7ASrqYzfZr2jAb8UCljLx8AzFuz-2a4w==", SubscribeForm);
+            if (result.IsSuccessStatusCode)
+            {
+                StatusMessage = "Thank you for subscribing";
+            }
+        }
+        catch
+        {
+            StatusMessage = $"An error occurd please try again"; 
+        }
+        SubscribeForm = new SubscriberFormModel();
+
+
+    }
+
+    public class SubscriberFormModel
+    {
+        [Required(ErrorMessage = "You have to enter a valid email")]
+        [RegularExpression("^[^@\\s]+@[^@\\s]+\\.[^@\\s]{2,}$", ErrorMessage = "Invalid email address")]
+        [EmailAddress]
+        public string Email { get; set; } = null!;
+
+
+        [Display(Name = "Daily Newsletter")]
+        public bool DailyNewsletter { get; set; } = false;
+
+
+        [Display(Name = "Event Updates")]
+        public bool EventUpdates { get; set; } = false;
+
+
+        [Display(Name = "Advertising Updates")]
+        public bool AdvertisingUpdates { get; set; } = false;
+
+
+        [Display(Name = "Startups Weekly")]
+        public bool StartupsWeekly { get; set; } = false;
+
+
+        [Display(Name = "Week In Review")]
+        public bool WeekInReview { get; set; } = false;
+
+
+        [Display(Name = "Podcasts")]
+        public bool Podcasts { get; set; } = false;
+    }
+}

@@ -1,0 +1,73 @@
+﻿@using Microsoft.AspNetCore.Identity
+@using BlazorApp.Data
+@inject NavigationManager NavigationManager
+@inject SignInManager<ApplicationUser> SignInManager
+@rendermode InteractiveServer
+
+@inject SignInManager<ApplicationUser> SignInManager
+
+@*     <nav>
+
+
+<ul class="nav nav-pills flex-column">
+    <li class="nav-item">
+            <NavLink class="nav-link" href="Account/Manage" Match="NavLinkMatch.All"><i class="fa-solid fa-gear"></i>Account Details</NavLink>
+    </li>
+    <li class="nav-item">
+            <NavLink class="nav-link" href="Account/security"><i class="fa-regular fa-lock"></i>Security</NavLink>
+    </li>
+    <li class="nav-item">
+            <NavLink class="nav-link" href="Account/savedcourses"><i class="fa-regular fa-bookmark"></i>Saved Courses</NavLink>
+    </li>
+        <li class="nav-item">
+            <NavLink class="nav-link" href="/signout"><i class="fa-solid fa-arrow-right-from-bracket rotate"></i>Sign out</NavLink>
+    </li>
+    @if (hasExternalLogins)
+    {
+        <li class="nav-item">
+            <NavLink class="nav-link" href="Account/Manage/ExternalLogins">External logins</NavLink>
+        </li>
+    }
+    <li class="nav-item">
+        <NavLink class="nav-link" href="Account/Manage/TwoFactorAuthentication">Two-factor authentication</NavLink>
+    </li>
+
+</ul>
+</nav> *@
+
+<nav>
+    <NavLink href="/account/manage" id="account-details-btn" class="btn btn-transparent" Match="NavLinkMatch.All">
+        <i class="fa-solid fa-gear"></i> Account Details
+    </NavLink>
+
+    <NavLink href="/account/security" id="security-btn" class="btn btn-transparent">
+        <i class="fa-regular fa-lock"></i> Security
+    </NavLink>
+
+    <NavLink href="/account/savedcourses" id="saved-courses-btn" class="btn btn-transparent">
+        <i class="fa-regular fa-bookmark"></i> Saved Courses
+    </NavLink>
+
+    <NavLink href="/account/savedcourses" id="notificationBtn" class="btn btn-transparent">
+        <i class="fa-regular fa-bookmark"></i> Notifications
+    </NavLink>
+
+    <NavLink href="/signout" id="sign-out-btn" class="btn btn-transparent">
+        <i class="fa-solid fa-arrow-right-from-bracket rotate"></i> Sign out
+    </NavLink>
+</nav>
+
+
+@code {
+    private bool hasExternalLogins;
+
+    protected override async Task OnInitializedAsync()
+    {
+        hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+    }
+
+    public void SignOut()
+    {
+        
+    }
+}

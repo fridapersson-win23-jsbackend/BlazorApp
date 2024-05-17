@@ -1,0 +1,123 @@
+﻿@page "/Account/RegisterConfirmation"
+
+@using System.Text
+@using BlazorWebbApp.Services
+@using Microsoft.AspNetCore.Identity
+@using Microsoft.AspNetCore.WebUtilities
+
+@inject UserManager<ApplicationUser> UserManager
+@inject NavigationManager NavigationManager
+
+<PageTitle>Register confirmation</PageTitle>
+
+<h1>Register confirmation</h1>
+
+<section id="sign-up">
+    <div class="container">
+
+        <div class="sign-up-form">
+            <EditForm FormName="verifyCode" Model="VerifyCodeForm" OnValidSubmit="OnValidSubmit" method="post" novalidate asp-route-returnUrl="@ReturnUrl">
+                <DataAnnotationsValidator />
+                <h1>Verify Account</h1>
+                <div class="name-info">
+                    <div class="first-name">
+                        <label for="signupFirstName">Verification Code</label>
+                        <InputText @bind-Value="VerifyCodeForm.Code" class="form-input" placeholder="Enter your verification code" id="verificationCode" />
+                        <ValidationMessage For="() => VerifyCodeForm.Code" />
+                        <p>@ErrorMessage</p>
+                    </div>
+                </div>
+                <div class="sign-up">
+                    <button class="btn-theme" type="submit">Verify Code</button>
+                </div>
+            </EditForm>
+        </div>
+        @* funkar inte  *@
+        <div class="sign-up">
+            <p class="resendVerificationCode">
+                Didn't receive an email?
+                <button class="btn-theme" @onclick="ResendCode">Resend VerificationCode</button>
+            </p>
+        </div>
+    </div>
+</section>
+
+@code {
+    private string? ErrorMessage { get; set; }
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+    [SupplyParameterFromQuery]
+    private string? Email { get; set; }
+
+    [SupplyParameterFromQuery]
+    private string? ReturnUrl { get; set; }
+
+    [SupplyParameterFromForm]
+    private VerifyCodeModel VerifyCodeForm { get; set; } = new();
+
+    private async Task OnValidSubmit()
+    {
+
+        var result = await Http.PostAsJsonAsync("https://verificationprovider-silicon.azurewebsites.net/api/validate?code=87kYArd-pHRGnOqF2c8eem6X8UHHNrx_sljs5ajQRKpNAzFu7OsChw==", new { Email = Email, Code = VerifyCodeForm.Code });
+
+        if (result.IsSuccessStatusCode)
+        {
+            var user = await UserManager.FindByEmailAsync(Email!);
+            user!.EmailConfirmed = true;
+
+            await UserManager.UpdateAsync(user);
+
+            NavigationManager.NavigateTo("/account/login");
+
+            // RedirectManager.RedirectTo("/account/login");
+        }
+        else
+        {
+            ErrorMessage = "Invalid verification code";
+        }
+    }
+
+    private async Task ResendCode()
+    {
+        // await ServiceBusService.SendMessageAsync(Email);
+        // ErrorMessage = "Verification code resent";
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Email is null)
+        {
+            NavigationManager.NavigateTo("/");
+            // RedirectManager.RedirectTo("");
+        }
+
+        var user = await UserManager.FindByEmailAsync(Email!);
+        if (user is null)
+        {
+            HttpContext.Response.StatusCode = StatusCodes.Status404NotFound;
+            ErrorMessage = "Error finding user for unspecified email";
+        }
+
+        // else
+        // {
+
+
+        //     // Once you add a real email sender, you should remove this code that lets you confirm the account
+        //     // var userId = await UserManager.GetUserIdAsync(user);
+        //     // var code = await UserManager.GenerateEmailConfirmationTokenAsync(user);
+        //     // code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+        //     // emailConfirmationLink = NavigationManager.GetUriWithQueryParameters(
+        //     //     NavigationManager.ToAbsoluteUri("Account/ConfirmEmail").AbsoluteUri,
+        //     //     new Dictionary<string, object?> { ["userId"] = userId, ["code"] = code, ["returnUrl"] = ReturnUrl });
+        // }
+    }
+
+    public class VerifyCodeModel
+    {
+        private string? StatusMessage { get; set; }
+        [Required]
+        public string Code { get; set; } = null!;
+    }
+}

@@ -1,0 +1,30 @@
+a {
+    /*@mixin standard-text;*/
+    color: var(--color-theme);
+    text-decoration: none;
+    transition: all 0.25s ease-in-out;
+
+    &:hover {
+        text-decoration: underline;
+    }
+}
+
+.menu-link {
+    line-height: 160%;
+    font-weight: 400;
+    /*color: var(--color-gray-700);*/
+    font-family: "font-manrope", sans-serif;
+    font-size: 16px;
+    color: var(--color-gray-800);
+    /*font-weight: 600 !important;*/
+    text-decoration: none;
+    transition: color 0.25s ease-in-out;
+
+    &:hover,
+    &:active,
+    &:focus,
+    .active {
+        color: var(--color-theme);
+        text-decoration: none;
+    }
+}

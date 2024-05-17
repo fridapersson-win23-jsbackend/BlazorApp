@@ -1,0 +1,63 @@
+﻿<section id="@manageWorkModel.Id" class="manage-work">
+    <div class="container">
+        <img src="./images/home/manage-work/manage-your-work-img.svg" />
+
+        <div class="content">
+            <h3>@manageWorkModel.Title</h3>
+            @if(manageWorkModel.Bullets != null)
+            {
+                foreach(var bullet in manageWorkModel.Bullets)
+                {
+                    <p>
+                        <i class="fa-sharp fa-regular fa-circle-check"></i>
+                        @bullet
+                    </p>
+                }
+            }
+
+           @*  <p>
+                <i class="fa-sharp fa-regular fa-circle-check"></i>
+                Transparent work management
+            </p>
+            <p>
+                <i class="fa-sharp fa-regular fa-circle-check"></i>
+                Manage work & focus on the most important tasks
+            </p>
+            <p>
+                <i class="fa-sharp fa-regular fa-circle-check"></i>
+                Track your progress with interactive charts
+            </p>
+            <p>
+                <i class="fa-sharp fa-regular fa-circle-check"></i>
+                Easiest way to track time spent on tasks
+            </p> *@
+            <NavLink href="/learnMore" class="btn-theme">@manageWorkModel.Link!.Text<i class="fa-sharp fa-solid fa-arrow-right"></i></NavLink>
+        </div>
+
+    </div>
+</section>
+
+@code {
+    private ManageWorkModel manageWorkModel = new ManageWorkModel
+        {
+            Id = "manageYourWork",
+            Title = "Manage Your Work",
+            Bullets = new List<string>
+            {
+                "Powerful project management",
+                "Transparent work management",
+                "Manage work & focus on the most important tasks",
+                "Track your progress with interactive charts",
+                "Easiest way to track time spent on tasks"
+
+            },
+            Image = new ImageModel
+            {
+                ImageUrl = "./images/home/manage-work/manage-your-work.svg"
+            },
+            Link = new LinkModel
+            {
+                Text = "Learn more"
+            }
+        };
+}

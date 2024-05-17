@@ -1,0 +1,49 @@
+﻿@attribute [StreamRendering]
+@inject NavigationManager NavigationManager
+
+@if(user != null)
+{
+    <div class="profile-info">
+        <div class="img-container">
+            <img src="@user.ProfilePicture" class="profile-img" />
+
+            @* Fixa *@
+@*         <EditForm enctype="multipart/form-data" method="POST" Model="" FormName="ProfileUpload" OnValidSubmit="UploadProfileImg">
+            <input id="uploadFile" type="file" name="file" hidden />
+            <label for="uploadFile" class="btn-circle"><i class="fa-regular fa-refresh"></i></label>
+        </EditForm> *@
+
+        </div>
+
+        <h5>@user.FirstName @user.LastName</h5>
+        <p>@user.Email</p>
+
+        <BlazorApp.Components.Layout.ManageNavMenu />
+    </div>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+
+
+@code {
+    private ApplicationUser user { get; set; } = null!;
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+
+    }
+    // public async Task UploadProfileImg()
+    // {
+
+    // }
+
+
+}

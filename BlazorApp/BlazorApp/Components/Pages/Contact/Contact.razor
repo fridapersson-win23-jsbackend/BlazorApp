@@ -1,0 +1,122 @@
+﻿@page "/contact"
+@rendermode InteractiveServer
+
+@attribute [StreamRendering]
+<section class="contact-us">
+    <div class="container">
+
+        <div class="contact-us-content">
+            <div class="mini-menu">
+                <NavLink href="/" class="home" ><i class="fa-light fa-house"></i>Home</NavLink>
+                <p><i class="fa-solid fa-chevrons-right"></i></p>
+                <NavLink href="/contact" >Contact</NavLink>
+            </div>
+            <h1>Contact Us</h1>
+
+            <div class="contact-info">
+                <div class="email-us">
+                    <div class="email-icon">
+                        <i class="fa-sharp fa-regular fa-envelope"></i>
+                    </div>
+                    <div class="email-info">
+                        <h5>Email Us</h5>
+                        <p>Please feel free to drop us a line. We will respond as soon as possible.</p>
+                        <p class="leave-a-message">Leave a message <i class="fa-regular fa-arrow-right"></i></p>
+                    </div>
+                </div>
+                <div class="career">
+                    <div class="career-icon">
+                        <i class="fa-light fa-users-medical"></i>
+                    </div>
+
+                    <div class="career-info">
+                        <h5>Careers</h5>
+                        <p>Sit ac ipsum leo lorem magna nunc mattis maecenas non vestibulum.</p>
+                        <p class="send-application">Send an application <i class="fa-regular fa-arrow-right"></i></p>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="form-container">
+            <h2>Get In Contact With Us</h2>
+            
+           @*  @if (TempData["Status"] != null && TempData["Status"]?.ToString() == "Success")
+            {
+                <div class="alerts alert-success">
+                    Thank you! Your message has been sent successfully.
+                </div>
+            }
+
+            @if (TempData["Status"] != null && TempData["Status"]?.ToString() == "Error")
+            {
+                <div class="alerts alert-danger">
+                    Incorrect values
+                </div>
+            } *@
+            @if (!string.IsNullOrEmpty(StatusMessage?.ToString()))
+            {
+                <div class="alerts alert-danger">
+                    @StatusMessage
+                </div>
+            }
+
+
+            <EditForm id="contact-form" FormName="contactModel" Model="contactModel" OnValidSubmit="HandleValidSubmit" method="post" novalidate>
+                <DataAnnotationsValidator />
+                <div class="form-name">
+                    <label for="contactName">Full Name</label>
+                    <ValidationMessage For="@(() => contactModel.Name)" />
+                    <InputText @bind-Value="contactModel.Name" placeholder="Enter your full name" id="contactName" />
+                </div>
+
+                <div class="form-email">
+                    <label for="contactEmail">Email address</label>
+                    <InputText @bind-Value="contactModel.Email" for="@contactModel.Email" placeholder="Enter your email address" id="contactEmail" />
+                    <ValidationMessage For="@(() => contactModel.Email)" />
+
+                </div>
+
+                <div class="drop-down">
+                    <label for="contactServices">Services <p class="optional">(optional)</p></label>
+                    <div class="select-wrapper">
+                        <InputSelect @bind-Value="contactModel.SelectedService" for="@contactModel.SelectedService" class="form-control" id="contactServices">
+                            <option value="">Choose the service you are interested in</option>
+                            @foreach (var service in contactModel.Services)
+                            {
+                                <option value="@service">@service</option>
+                            }
+                        </InputSelect>
+                        <span class="arrow"><i class="fa-solid fa-chevron-down"></i></span>
+                    </div>
+                </div>
+
+                <div class="form-message-us">
+                    <label for="contactMessage">Message</label>
+                    <InputTextArea @bind-Value="contactModel.Message" for="@contactModel.Message" rows="8" placeholder="Enter your message here..." id="contactMessage"></InputTextArea>
+                    <ValidationMessage For="@(() => contactModel.Message)" />
+                </div>
+
+                <button type="submit" class="btn-theme">Send Contact Request</button>
+            </EditForm>
+        </div>
+
+    </div>
+
+    <div class="google-maps">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3155.377117188209!2d-122.4111476912076!3d37.734296113193174!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x808f7ef933e80d45%3A0x16993eecc12ce3d4!2sCT%20CalTrans%20Specialty%20Region%20Richard%20Street!5e0!3m2!1ssv!2sse!4v1711730616249!5m2!1ssv!2sse" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</section>
+
+    @code {
+        [SupplyParameterFromQuery]
+        private string? StatusMessage { get; set; }
+
+        private ContactModel contactModel = new ContactModel();
+
+        private void HandleValidSubmit()
+        {
+            
+        }
+    }

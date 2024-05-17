@@ -1,0 +1,238 @@
+.courses {
+    color: var(--color-gray-900);
+    display: flex;
+
+    .container {
+        .bread-crum {
+            display: flex;
+            text-align: center;
+            justify-content: center;
+            margin-top: 1rem;
+            gap: .6rem;
+
+            @include md {
+                justify-content: start;
+            }
+
+            @include lg {
+                margin-top: 2rem;
+            }
+
+            .fa-chevrons-right {
+                font-size: .8rem;
+            }
+
+            .home {
+                a {
+                    display: grid;
+                    grid-template-columns: auto auto;
+                    gap: .2rem;
+
+                    p {
+                        color: var(--color-gray-600);
+                    }
+
+                    i {
+                        margin-top: .25rem;
+                        color: var(--color-gray-600);
+                    }
+                }
+            }
+
+            .courses {
+                p {
+                    color: var(--color-gray-900);
+                }
+            }
+        }
+
+        .heading {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1rem;
+
+            @include lg {
+                justify-content: start;
+                flex-direction: row;
+                justify-content: space-between;
+                margin-bottom: 2rem;
+            }
+
+            .tool-and-search-container {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 1rem;
+
+                @include lg {
+                    flex-direction: row;
+                    gap: 2rem;
+                }
+
+                form {
+                    display: grid;
+                    grid-template-columns: 1fr 1fr;
+                    border-radius: .5rem;
+                    gap: 2rem;
+                    align-items: center;
+                    margin-bottom: 2rem;
+
+                    @include lg {
+                        margin-bottom: 0;
+                    }
+
+                    .select {
+                        position: relative;
+
+                        .selected {
+                            display: flex;
+                            align-items: center;
+                            justify-content: space-between;
+                            cursor: pointer;
+                            padding: .3rem;
+                            border: solid 1px var(--color-gray-500);
+                            border-radius: .5rem;
+                            background-color: var(--color-gray-000);
+                            color: var(--color-gray-500);
+
+                            &:hover {
+                                transition: ease-in-out .3s;
+                                background-color: var(--color-gray-700);
+                            }
+
+                            .fa-chevron-down {
+                                font-size: .6rem;
+                            }
+                        }
+
+                        .option {
+                            background: var(--color-gray-000);
+                            padding: .5rem;
+                            box-shadow: .5rem 0rem 1rem rgba(0,0,0,0.2);
+                            cursor: pointer;
+                            width: 120%;
+
+
+                            &:hover {
+                                transition: ease-in-out .3s;
+                                background: var(--color-gray-500);
+                            }
+                        }
+
+                        .select-options {
+                            display: none;
+                            position: absolute;
+                            z-index: 2;
+                        }
+
+                        .show {
+                            display: block;
+                        }
+                    }
+
+                    .input-search {
+                        display: flex;
+                        position: relative;
+                        border: none;
+
+
+                        @include lg {
+                            margin: 0;
+                            justify-content: end;
+                        }
+
+                        .searchQuery {
+                            border-radius: .5rem;
+                            padding: .3rem;
+                            padding-left: 2rem;
+                            border: solid 1px var(--color-gray-400);
+                            color: var(--color-gray-900);
+                            background: var(--color-gray-000);
+
+                            &::placeholder {
+                                color: var(--color-gray-500);
+                            }
+                        }
+
+                        .fa-magnifying-glass {
+                            position: absolute;
+                            right: 1rem;
+                            top: .6rem;
+                            color: var(--color-gray-500);
+                        }
+                    }
+                }
+            }
+        }
+
+        .banner {
+            margin-top: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-top: 4rem;
+            width: 100%;
+            background-color: var(--color-gray-100);
+
+            @include md {
+                flex-direction: row-reverse;
+            }
+
+            @include xl {
+                margin-bottom: 4rem;
+            }
+
+            img {
+                width: 100%;
+                object-fit: cover;
+
+                @include md {
+                    width: 50%;
+                }
+            }
+        }
+
+        .skills {
+            padding-bottom: 2rem;
+
+            @include md {
+                margin-bottom: 4rem;
+                padding: 2rem;
+            }
+
+            @include xl {
+                margin-left: 4rem;
+            }
+
+            span {
+                color: var(--color-theme);
+            }
+
+            .h4 {
+                margin-bottom: 2rem;
+
+                @include xl {
+                    @include h1;
+                }
+
+                @include xxl {
+                    @include d5;
+                }
+            }
+
+            .btn-theme {
+                @include md {
+                    width: 50%;
+                    margin-top: 1.5rem;
+                }
+
+                @include xl {
+                    width: 30%;
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,27 @@
+﻿@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using static Microsoft.AspNetCore.Components.Web.RenderMode
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.JSInterop
+@using BlazorApp
+@using BlazorApp.Client
+@using BlazorApp.Components
+@using BlazorApp.Components.Sections
+@using BlazorApp.Components.Sections.Home
+@using BlazorProject.Models
+@using BlazorProject.Models.Home
+@using System.ComponentModel.DataAnnotations
+@using BlazorProject.Models.Generic
+@using BlazorWebbApp.Models.Contact
+@using BlazorApp.Data
+@using Microsoft.AspNetCore.Identity
+@using BlazorApp.Components.Sections.Account
+
+
+@inject HttpClient Http
+@inject UserManager<ApplicationUser> UserManager
+@inject SignInManager<ApplicationUser> SignInManager
