@@ -16,154 +16,157 @@
                 margin-top: 4rem;
             }
 
-            .basic-info {
-                form {
-                    .error-message {
-                        border: solid red 1px;
+            form {
+                .error-message {
+                    border: solid red 1px;
+                }
+
+
+                input, textarea {
+                    border-radius: .5rem;
+                    padding: .6rem;
+                    padding-left: .5rem;
+                    border: solid var(--color-gray-400) 1px;
+                    color: var(--color-gray-700);
+                    background: var(--color-gray-000);
+
+                    &::placeholder {
+                        color: var(--color-gray-500);
                     }
 
-                    input, textarea {
-                        border-radius: .5rem;
-                        padding: .6rem;
-                        padding-left: .5rem;
-                        border: solid var(--color-gray-400) 1px;
-                        color: var(--color-gray-700);
-                        background: var(--color-gray-000);
+                    @include lg {
+                        padding-left: .8rem;
+                    }
+                }
 
-                        &::placeholder {
-                            color: var(--color-gray-500);
+                label {
+                    font-weight: bold;
+                }
+
+                h2 {
+                    text-align: center;
+
+                    @include lg {
+                        text-align: left;
+                    }
+                }
+
+                h5 {
+                    color: var(--color-theme);
+                    text-align: center;
+                    margin-bottom: 1rem;
+
+                    @include lg {
+                        text-align: left;
+                    }
+                }
+
+                .content {
+                    display: grid;
+                    gap: 1rem;
+                    grid-template-columns: 1fr;
+
+                    @include lg {
+                        grid-template-columns: 1fr 1fr;
+                        grid-template-areas: "firstname lastname" "email phone" "bio bio"
+                    }
+
+                    #form-firstname, #form-lastname, #form-email, #form-phone, #form-bio {
+                        display: grid;
+                        grid-template-columns: 1fr;
+                        position: relative;
+
+                        span {
+                            position: absolute;
+                            right: 0;
+                            top: 0;
+                            @include text-xs;
+                            color: var(--color-danger-dark);
+
+                            @include md {
+                                @include text-s;
+                                color: var(--color-danger-dark);
+                            }
                         }
+                    }
 
+                    #form-firstname {
                         @include lg {
-                            padding-left: .8rem;
+                            grid-area: firstname;
+                        }
+
+                        label {
+                            font-weight: bold;
                         }
                     }
 
-                    label {
-                        font-weight: bold;
-                    }
-
-                    h2 {
-                        text-align: center;
-
+                    #form-lastname {
                         @include lg {
-                            text-align: left;
+                            grid-area: lastname;
                         }
                     }
 
-                    h5 {
-                        color: var(--color-theme);
-                        text-align: center;
+                    #form-email {
+                        @include lg {
+                            grid-area: email;
+                        }
+                    }
+
+                    #form-phone {
+                        @include lg {
+                            grid-area: phone;
+                        }
+
+                        label {
+                            display: flex;
+                            margin: 0;
+                            padding: 0;
+
+                            p {
+                                margin: 0;
+                                padding: 0;
+                                opacity: .4;
+                            }
+                        }
+                    }
+
+                    #form-bio {
+                        @include lg {
+                            grid-area: bio;
+                        }
+
+                        label {
+                            display: flex;
+                            gap: .2rem;
+
+                            p {
+                                opacity: .4;
+                                margin: 0;
+                            }
+                        }
+                    }
+
+                    .form-buttons {
+                        display: flex;
+                        flex-direction: column;
+                        gap: 1rem;
                         margin-bottom: 1rem;
 
                         @include lg {
-                            text-align: left;
-                        }
-                    }
-
-                    .content {
-                        display: grid;
-                        gap: 1rem;
-                        grid-template-columns: 1fr;
-
-                        @include lg {
-                            grid-template-columns: 1fr 1fr;
-                            grid-template-areas: "firstname lastname" "email phone" "bio bio"
-                        }
-
-                        #form-firstname, #form-lastname, #form-email, #form-phone, #form-bio {
-                            display: grid;
-                            grid-template-columns: 1fr;
-                            position: relative;
-
-                            span {
-                                position: absolute;
-                                right: 0;
-                                top: 0;
-                                @include text-xs;
-                                color: var(--color-danger-dark);
-
-                                @include md {
-                                    @include text-s;
-                                    color: var(--color-danger-dark);
-                                }
-                            }
-                        }
-
-                        #form-firstname {
-                            @include lg {
-                                grid-area: firstname;
-                            }
-
-                            label {
-                                font-weight: bold;
-                            }
-                        }
-
-                        #form-lastname {
-                            @include lg {
-                                grid-area: lastname;
-                            }
-                        }
-
-                        #form-email {
-                            @include lg {
-                                grid-area: email;
-                            }
-                        }
-
-                        #form-phone {
-                            @include lg {
-                                grid-area: phone;
-                            }
-
-                            label {
-                                display: flex;
-                                margin: 0;
-                                padding: 0;
-
-                                p {
-                                    margin: 0;
-                                    padding: 0;
-                                    opacity: .4;
-                                }
-                            }
-                        }
-
-                        #form-bio {
-                            @include lg {
-                                grid-area: bio;
-                            }
-
-                            label {
-                                display: flex;
-                                gap: .2rem;
-
-                                p {
-                                    opacity: .4;
-                                    margin: 0;
-                                }
-                            }
-                        }
-
-                        .form-buttons {
-                            display: flex;
-                            flex-direction: column;
-                            gap: 1rem;
-                            margin-bottom: 1rem;
-
-                            @include lg {
-                                flex-direction: row;
-                                margin: 1.5rem 0;
-                            }
+                            flex-direction: row;
+                            margin: 1.5rem 0;
                         }
                     }
                 }
+
+             /*   .basic-info {
+                }*/
             }
 
-            .address-info {
-                form {
-                    display: grid;
+            form {
+                display: grid;
+
+                .address-info {
 
                     input {
                         border-radius: .5rem;

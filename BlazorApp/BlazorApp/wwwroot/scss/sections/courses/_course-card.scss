@@ -59,6 +59,13 @@
             filter: brightness(0.7);
         }
 
+        a{
+            text-decoration: none;
+            &:hover {
+                text-decoration: underline;
+            }
+        }
+
         p {
             color: var(--color-gray-900);
 

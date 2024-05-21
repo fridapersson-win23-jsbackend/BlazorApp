@@ -2280,10 +2280,14 @@ aside .profile-info nav .btn-transparent i {
     margin-top: 4rem;
   }
 }
-.account-details-section .container .account-details .basic-info form .error-message {
+.account-details-section .container .account-details form {
+  /*   .basic-info {
+     }*/
+}
+.account-details-section .container .account-details form .error-message {
   border: solid red 1px;
 }
-.account-details-section .container .account-details .basic-info form input, .account-details-section .container .account-details .basic-info form textarea {
+.account-details-section .container .account-details form input, .account-details-section .container .account-details form textarea {
   border-radius: 0.5rem;
   padding: 0.6rem;
   padding-left: 0.5rem;
@@ -2291,52 +2295,52 @@ aside .profile-info nav .btn-transparent i {
   color: var(--color-gray-700);
   background: var(--color-gray-000);
 }
-.account-details-section .container .account-details .basic-info form input::placeholder, .account-details-section .container .account-details .basic-info form textarea::placeholder {
+.account-details-section .container .account-details form input::placeholder, .account-details-section .container .account-details form textarea::placeholder {
   color: var(--color-gray-500);
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form input, .account-details-section .container .account-details .basic-info form textarea {
+  .account-details-section .container .account-details form input, .account-details-section .container .account-details form textarea {
     padding-left: 0.8rem;
   }
 }
-.account-details-section .container .account-details .basic-info form label {
+.account-details-section .container .account-details form label {
   font-weight: bold;
 }
-.account-details-section .container .account-details .basic-info form h2 {
+.account-details-section .container .account-details form h2 {
   text-align: center;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form h2 {
+  .account-details-section .container .account-details form h2 {
     text-align: left;
   }
 }
-.account-details-section .container .account-details .basic-info form h5 {
+.account-details-section .container .account-details form h5 {
   color: var(--color-theme);
   text-align: center;
   margin-bottom: 1rem;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form h5 {
+  .account-details-section .container .account-details form h5 {
     text-align: left;
   }
 }
-.account-details-section .container .account-details .basic-info form .content {
+.account-details-section .container .account-details form .content {
   display: grid;
   gap: 1rem;
   grid-template-columns: 1fr;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content {
+  .account-details-section .container .account-details form .content {
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "firstname lastname" "email phone" "bio bio";
   }
 }
-.account-details-section .container .account-details .basic-info form .content #form-firstname, .account-details-section .container .account-details .basic-info form .content #form-lastname, .account-details-section .container .account-details .basic-info form .content #form-email, .account-details-section .container .account-details .basic-info form .content #form-phone, .account-details-section .container .account-details .basic-info form .content #form-bio {
+.account-details-section .container .account-details form .content #form-firstname, .account-details-section .container .account-details form .content #form-lastname, .account-details-section .container .account-details form .content #form-email, .account-details-section .container .account-details form .content #form-phone, .account-details-section .container .account-details form .content #form-bio {
   display: grid;
   grid-template-columns: 1fr;
   position: relative;
 }
-.account-details-section .container .account-details .basic-info form .content #form-firstname span, .account-details-section .container .account-details .basic-info form .content #form-lastname span, .account-details-section .container .account-details .basic-info form .content #form-email span, .account-details-section .container .account-details .basic-info form .content #form-phone span, .account-details-section .container .account-details .basic-info form .content #form-bio span {
+.account-details-section .container .account-details form .content #form-firstname span, .account-details-section .container .account-details form .content #form-lastname span, .account-details-section .container .account-details form .content #form-email span, .account-details-section .container .account-details form .content #form-phone span, .account-details-section .container .account-details form .content #form-bio span {
   position: absolute;
   right: 0;
   top: 0;
@@ -2348,7 +2352,7 @@ aside .profile-info nav .btn-transparent i {
   color: var(--color-danger-dark);
 }
 @media (min-width: 768px) {
-  .account-details-section .container .account-details .basic-info form .content #form-firstname span, .account-details-section .container .account-details .basic-info form .content #form-lastname span, .account-details-section .container .account-details .basic-info form .content #form-email span, .account-details-section .container .account-details .basic-info form .content #form-phone span, .account-details-section .container .account-details .basic-info form .content #form-bio span {
+  .account-details-section .container .account-details form .content #form-firstname span, .account-details-section .container .account-details form .content #form-lastname span, .account-details-section .container .account-details form .content #form-email span, .account-details-section .container .account-details form .content #form-phone span, .account-details-section .container .account-details form .content #form-bio span {
     line-height: 160%;
     font-weight: 400;
     color: var(--color-gray-700);
@@ -2358,67 +2362,67 @@ aside .profile-info nav .btn-transparent i {
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content #form-firstname {
+  .account-details-section .container .account-details form .content #form-firstname {
     grid-area: firstname;
   }
 }
-.account-details-section .container .account-details .basic-info form .content #form-firstname label {
+.account-details-section .container .account-details form .content #form-firstname label {
   font-weight: bold;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content #form-lastname {
+  .account-details-section .container .account-details form .content #form-lastname {
     grid-area: lastname;
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content #form-email {
+  .account-details-section .container .account-details form .content #form-email {
     grid-area: email;
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content #form-phone {
+  .account-details-section .container .account-details form .content #form-phone {
     grid-area: phone;
   }
 }
-.account-details-section .container .account-details .basic-info form .content #form-phone label {
+.account-details-section .container .account-details form .content #form-phone label {
   display: flex;
   margin: 0;
   padding: 0;
 }
-.account-details-section .container .account-details .basic-info form .content #form-phone label p {
+.account-details-section .container .account-details form .content #form-phone label p {
   margin: 0;
   padding: 0;
   opacity: 0.4;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content #form-bio {
+  .account-details-section .container .account-details form .content #form-bio {
     grid-area: bio;
   }
 }
-.account-details-section .container .account-details .basic-info form .content #form-bio label {
+.account-details-section .container .account-details form .content #form-bio label {
   display: flex;
   gap: 0.2rem;
 }
-.account-details-section .container .account-details .basic-info form .content #form-bio label p {
+.account-details-section .container .account-details form .content #form-bio label p {
   opacity: 0.4;
   margin: 0;
 }
-.account-details-section .container .account-details .basic-info form .content .form-buttons {
+.account-details-section .container .account-details form .content .form-buttons {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .basic-info form .content .form-buttons {
+  .account-details-section .container .account-details form .content .form-buttons {
     flex-direction: row;
     margin: 1.5rem 0;
   }
 }
-.account-details-section .container .account-details .address-info form {
+.account-details-section .container .account-details form {
   display: grid;
 }
-.account-details-section .container .account-details .address-info form input {
+.account-details-section .container .account-details form .address-info input {
   border-radius: 0.5rem;
   padding: 0.2rem;
   padding-left: 0.5rem;
@@ -2426,45 +2430,45 @@ aside .profile-info nav .btn-transparent i {
   color: var(--color-gray-700);
   background: var(--color-gray-000);
 }
-.account-details-section .container .account-details .address-info form input::placeholder {
+.account-details-section .container .account-details form .address-info input::placeholder {
   color: var(--color-gray-500);
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form input {
+  .account-details-section .container .account-details form .address-info input {
     padding: 0.6rem;
     padding-left: 0.8rem;
   }
 }
-.account-details-section .container .account-details .address-info form label {
+.account-details-section .container .account-details form .address-info label {
   font-weight: bold;
 }
-.account-details-section .container .account-details .address-info form h5 {
+.account-details-section .container .account-details form .address-info h5 {
   color: var(--color-theme);
   text-align: center;
   margin-bottom: 1rem;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form h5 {
+  .account-details-section .container .account-details form .address-info h5 {
     text-align: left;
     margin: 1.5rem 0;
   }
 }
-.account-details-section .container .account-details .address-info form .content {
+.account-details-section .container .account-details form .address-info .content {
   display: grid;
   gap: 1rem;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content {
+  .account-details-section .container .account-details form .address-info .content {
     grid-template-columns: 1fr 1fr;
     grid-template-areas: "address_1 address_1" "address_2 address_2" "postal-code city";
   }
 }
-.account-details-section .container .account-details .address-info form .content #form-address-line_1, .account-details-section .container .account-details .address-info form .content #form-address-line_2, .account-details-section .container .account-details .address-info form .content #form-postal-code, .account-details-section .container .account-details .address-info form .content #form-city {
+.account-details-section .container .account-details form .address-info .content #form-address-line_1, .account-details-section .container .account-details form .address-info .content #form-address-line_2, .account-details-section .container .account-details form .address-info .content #form-postal-code, .account-details-section .container .account-details form .address-info .content #form-city {
   display: grid;
   grid-template-columns: 1fr;
   position: relative;
 }
-.account-details-section .container .account-details .address-info form .content #form-address-line_1 span, .account-details-section .container .account-details .address-info form .content #form-address-line_2 span, .account-details-section .container .account-details .address-info form .content #form-postal-code span, .account-details-section .container .account-details .address-info form .content #form-city span {
+.account-details-section .container .account-details form .address-info .content #form-address-line_1 span, .account-details-section .container .account-details form .address-info .content #form-address-line_2 span, .account-details-section .container .account-details form .address-info .content #form-postal-code span, .account-details-section .container .account-details form .address-info .content #form-city span {
   position: absolute;
   right: 0;
   top: 0;
@@ -2476,7 +2480,7 @@ aside .profile-info nav .btn-transparent i {
   color: var(--color-danger-dark);
 }
 @media (min-width: 768px) {
-  .account-details-section .container .account-details .address-info form .content #form-address-line_1 span, .account-details-section .container .account-details .address-info form .content #form-address-line_2 span, .account-details-section .container .account-details .address-info form .content #form-postal-code span, .account-details-section .container .account-details .address-info form .content #form-city span {
+  .account-details-section .container .account-details form .address-info .content #form-address-line_1 span, .account-details-section .container .account-details form .address-info .content #form-address-line_2 span, .account-details-section .container .account-details form .address-info .content #form-postal-code span, .account-details-section .container .account-details form .address-info .content #form-city span {
     line-height: 160%;
     font-weight: 400;
     color: var(--color-gray-700);
@@ -2486,41 +2490,41 @@ aside .profile-info nav .btn-transparent i {
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content #form-address-line_1 {
+  .account-details-section .container .account-details form .address-info .content #form-address-line_1 {
     grid-area: address_1;
   }
 }
-.account-details-section .container .account-details .address-info form .content #form-address-line_2 label {
+.account-details-section .container .account-details form .address-info .content #form-address-line_2 label {
   display: flex;
   gap: 0.2rem;
 }
-.account-details-section .container .account-details .address-info form .content #form-address-line_2 label p {
+.account-details-section .container .account-details form .address-info .content #form-address-line_2 label p {
   opacity: 0.4;
   margin: 0;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content #form-address-line_2 {
+  .account-details-section .container .account-details form .address-info .content #form-address-line_2 {
     grid-area: address_2;
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content #form-postal-code {
+  .account-details-section .container .account-details form .address-info .content #form-postal-code {
     grid-area: postal-code;
   }
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content #form-city {
+  .account-details-section .container .account-details form .address-info .content #form-city {
     grid-area: city;
   }
 }
-.account-details-section .container .account-details .address-info form .content .form-buttons {
+.account-details-section .container .account-details form .address-info .content .form-buttons {
   display: flex;
   flex-direction: column;
   gap: 1rem;
   margin-bottom: 1rem;
 }
 @media (min-width: 992px) {
-  .account-details-section .container .account-details .address-info form .content .form-buttons {
+  .account-details-section .container .account-details form .address-info .content .form-buttons {
     flex-direction: row;
     margin-top: 1.5rem;
   }
@@ -3218,6 +3222,12 @@ aside .profile-info nav .btn-transparent i {
 }
 .box .content:hover {
   filter: brightness(0.7);
+}
+.box .content a {
+  text-decoration: none;
+}
+.box .content a:hover {
+  text-decoration: underline;
 }
 .box .content p {
   color: var(--color-gray-900);

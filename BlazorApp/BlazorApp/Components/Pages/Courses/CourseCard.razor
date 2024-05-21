@@ -1,1 +1,60 @@
-﻿
+﻿@* @using BlazorApp.Models.Courses
+
+<div class="box-content">
+    <div class="boxes" id="boxes">
+        <div class="box">
+            @if (Courses!.IsBestSeller)
+            {
+                <span class="best-seller text-s">Best Seller</span>
+            }
+            <form asp-controller="Account" asp-action="@(Courses.IsSaved ? "RemoveCourseFromProfile" : "SaveCourseToProfile")">
+                <input type="hidden" name="courseId" value="@Courses.Id" />
+                <button type="submit" class="bookmark x-mark @(Courses.IsSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")" data-courseid="@Courses.Id" data-saved="@Courses.IsSaved"></button>
+            </form>
+
+            <div class="content">
+                <a asp-action="CourseDetails" asp-controller="Courses" asp-route-id="@Courses.Id">
+                    <img src="~/images/courses/@Courses.ImageUri" />
+                    <p class="h5">@Courses.Title</p>
+
+                    <p class="text-s">By @Courses.Author</p>
+                    <div class="extra-price">
+                        @if (Courses.DiscountedPrice == 0)
+                        {
+                            <p class="price">$@Courses.Price</p>
+                        }
+                        else
+                        {
+                            <p class="new-price">$@Courses.DiscountedPrice</p>
+                            <span class="old-price">$@Courses.Price</span>
+                        }
+                    </div>
+
+                    <div class="line"></div>
+
+                    <div class="bottom-info">
+                        <div class="hours">
+                            <i class="fa-light fa-clock"></i>
+                            <p>@Courses.HoursToComplete hours</p>
+                        </div>
+                        <div class="likes">
+                            <i class="fa-light fa-thumbs-up"></i>
+                            <p>
+                                @($"{Courses.LikesInPercent}%")  
+                                (@($"{Courses.LikesInNumber}K"))  
+
+                            </p>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+    @await Html.PartialAsync("~/Views/Courses/Components/_PaginationPartial.cshtml")
+</div>
+
+
+@code {
+    [Parameter]
+    public CourseCardModel Courses { get; set; } = new();
+} *@

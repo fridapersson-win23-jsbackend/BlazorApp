@@ -1,6 +1,7 @@
 using BlazorApp;
 using BlazorApp.Components;
 using BlazorApp.Data;
+using BlazorApp.Services;
 using BlazorWebbApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -17,6 +18,8 @@ builder.Services.AddRazorComponents()
 builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<ServiceBusService>();
+builder.Services.AddScoped<UserService>();
+
 
 
 builder.Services.AddCascadingAuthenticationState();
@@ -30,9 +33,25 @@ builder.Services.AddAuthentication(options =>
     .AddIdentityCookies();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+
+
+
+//builder.Services.AddPooledDbContextFactory<ApplicationDbContext>(x =>
+//{
+//x.UseSqlServer(connectionString)
+//.UseLazyLoadingProxies();
+//});
+
+
+
+
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
+
+
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+
 
 builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()

@@ -1,5 +1,7 @@
-﻿@attribute [StreamRendering]
+﻿@using BlazorApp.Services
+@attribute [StreamRendering]
 @inject NavigationManager NavigationManager
+@inject UserService UserService
 
 @if(user != null)
 {
@@ -8,10 +10,10 @@
             <img src="@user.ProfilePicture" class="profile-img" />
 
             @* Fixa *@
-@*         <EditForm enctype="multipart/form-data" method="POST" Model="" FormName="ProfileUpload" OnValidSubmit="UploadProfileImg">
+        <EditForm enctype="multipart/form-data" method="POST" Model="user" FormName="ProfileUpload" OnValidSubmit="UploadProfileImg">
             <input id="uploadFile" type="file" name="file" hidden />
             <label for="uploadFile" class="btn-circle"><i class="fa-regular fa-refresh"></i></label>
-        </EditForm> *@
+        </EditForm>
 
         </div>
 
@@ -38,13 +40,14 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+        user = await UserService.GetUserAsync();
+        // user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
 
     }
-    // public async Task UploadProfileImg()
-    // {
+    public async Task UploadProfileImg()
+    {
 
-    // }
+    }
 
 
 }

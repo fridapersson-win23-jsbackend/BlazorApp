@@ -1,5 +1,5 @@
 ﻿@rendermode InteractiveServer
-@inject HttpClient Http
+@* @inject HttpClient Http *@
 
 
 <section id="news-letter" class="news-letter">
@@ -119,24 +119,28 @@
         
     }
 
-
     private async Task OnValidSubmit()
     {
         try
         {
             var result = await Http.PostAsJsonAsync("https://subscribeprovider-silicon.azurewebsites.net/api/Subscribe?code=nF6-myclvmiyagMfBsA1zJ7ASrqYzfZr2jAb8UCljLx8AzFuz-2a4w==", SubscribeForm);
+            // var result = await Http.PostAsJsonAsync("http://localhost:7044/api/Subscribe", SubscribeForm);
             if (result.IsSuccessStatusCode)
             {
                 StatusMessage = "Thank you for subscribing";
             }
+            else
+            {
+                var responseContent = await result.Content.ReadAsStringAsync();
+                StatusMessage = $"Error: {result.StatusCode}, Details: {responseContent}";
+            }
         }
-        catch
+        catch (Exception ex)
         {
-            StatusMessage = $"An error occurd please try again"; 
+            Console.WriteLine(ex.Message);
+            StatusMessage = $"{ex.Message} :: An error occurd please try again";
         }
         SubscribeForm = new SubscriberFormModel();
-
-
     }
 
     public class SubscriberFormModel

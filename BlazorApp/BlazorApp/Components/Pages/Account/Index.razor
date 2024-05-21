@@ -1,12 +1,21 @@
 ﻿@page "/Account/Manage"
+@rendermode InteractiveServer
 
 @using System.ComponentModel.DataAnnotations
 @using BlazorApp.Models.Account
+@using BlazorApp.Services
 @using Microsoft.AspNetCore.Identity
 @using BlazorApp.Data
+@using Microsoft.EntityFrameworkCore
 
 @inject UserManager<ApplicationUser> UserManager
 @inject SignInManager<ApplicationUser> SignInManager
+@* @inject IDbContextFactory<ApplicationDbContext> DbContextFactory *@
+    @inject IServiceScopeFactory ScopeFactory
+    @inject UserService UserService
+
+@attribute [StreamRendering]
+
 
 <PageTitle>Profile</PageTitle>
 
@@ -33,244 +42,159 @@
 @*     </div>
 </div> *@
 
-<section class="basic-info">
-    @*     @if (!string.IsNullOrEmpty(ViewData["ErrorMessage"]?.ToString()))
-    {
-    <div class="alerts alert-danger">
-    @ViewData["ErrorMessage"]
-    </div>
-    }
-    @if (!string.IsNullOrEmpty(ViewData["Message"]?.ToString()))
-    {
-    <div class="alerts alert-success">
-    @ViewData["Message"]
-    </div>
-    } *@
-    <EditForm FormName="basicInfo" Model="BasicInfo" method="POST" OnValidSubmit="HandleSubmit" novalidate>
-        <DataAnnotationsValidator />
-        <h2>Account Details</h2>
-        <h5 class="theme">Basic info</h5>
 
+<EditForm FormName="basicInfo" Model="accountDetails" method="POST" OnValidSubmit="UpdateAccountDetailsInfo" novalidate>
+ <DataAnnotationsValidator />
 
+    <section class="basic-info">
+            <h2>Account Details</h2>
+            <h5 class="theme">Basic info</h5>
 
-        <div class="content">
-            <div id="form-firstname">
-                <label for="basicInfoFirstName">First name</label>
+            <div class="content">
+                <div id="form-firstname">
+                    <label for="basicInfoFirstName">First name</label>
 
-                @*                 @if (user.IsExternalAccount)
-                {
-                <input asp-for="BasicInfo!.FirstName" disabled />
-                } *@
-               @*  else
-                { *@
-                <InputText @bind-Value="BasicInfo.FirstName" placeholder="Enter your first name" id="basicInfoFirstName" />
-                <ValidationMessage For="@(() => BasicInfo.FirstName)" />
+                    <InputText @bind-Value="accountDetails.FirstName" placeholder="Enter your first name" id="basicInfoFirstName" />
+                    <ValidationMessage For="@(() => accountDetails.FirstName)" />
+                </div>
 
-                @* } *@
-   @*              <label for="signupLastName">Lastname</label>
-                <InputText @bind-Value="SignUpForm.LastName" class="form-input" placeholder="Enter your last name" id="signupLastName" />
-                <ValidationMessage For="() => SignUpForm.LastName" /> *@
+                <div id="form-lastname">
+                    <label for="basicInfoLastName">Last name</label>
 
+                    <InputText @bind-Value="accountDetails.LastName" placeholder="Enter your last name" id="basicInfoLastName" />
+                    <ValidationMessage For="(() => accountDetails.LastName)" />
+                </div>
+
+                <div id="form-email">
+                    <label for="basicInfoEmail">Email</label>
+
+                    <InputText @bind-Value="accountDetails.Email" placeholder="Enter your email" id="basicInfoEmail" />
+                    <ValidationMessage For="(() => accountDetails.Email)" />
+                </div>
+
+                <div id="form-phone">
+                    <label for="basicinfoPhone">Phone Number <p class="optional">(optional)</p></label>
+
+                    <InputText @bind-Value="accountDetails.PhoneNumber" placeholder="Enter your phonenumber" id="basicinfoPhone" />
+                    <ValidationMessage For="(() => accountDetails.PhoneNumber)" />
+                </div>
+
+                <div id="form-bio">
+                    <label for="basicinfoBiography">Bio <p class="optional">(optional)</p></label>
+
+                    <InputTextArea @bind-Value="accountDetails.Biography" placeholder="Enter your biography" id="basicinfoBiography"></InputTextArea>
+                </div>
+
+@*                 <div class="form-buttons">
+
+                    <button class="btn-gray" type="reset" onclick="location.reload();">Cancel</button>
+                    <button class="btn-theme" type="submit">Save Changes</button>
+
+                </div> *@
             </div>
+    </section>
 
-            <div id="form-lastname">
-                <label for="basicInfoLastName">Last name</label>
-                @*                 @if (user.IsExternalAccount)
-                {
-                <input asp-for="BasicInfo!.LastName" disabled />
-                } *@
-          @*       else
-                { *@
-                <InputText @bind-Value="BasicInfo.LastName" placeholder="Enter your last name" id="basicInfoLastName" />
-                <ValidationMessage For="(() => BasicInfo.LastName)" />
-                @* } *@
-            </div>
-
-            <div id="form-email">
-                <label for="basicInfoEmail">Email</label>
-                @*                 @if (user.IsExternalAccount)
-                {
-                <input asp-for="BasicInfo!.Email" disabled />
-                } *@
-         @*        else
-                { *@
-                <InputText @bind-Value="BasicInfo.Email" placeholder="Enter your email" id="basicInfoEmail" />
-                <ValidationMessage For="(() => BasicInfo.Email)" />
-                @* } *@
-            </div>
-
-            <div id="form-phone">
-                <label for="basicinfoPhone">Phone Number <p class="optional">(optional)</p></label>
-
-                @*                 @if (user.IsExternalAccount)
-                {
-                <input asp-for="BasicInfo!.PhoneNumber" disabled />
-                } *@
-    @*             else
-                { *@
-                <InputText @bind-Value="BasicInfo.PhoneNumber" placeholder="Enter your phonenumber" id="basicinfoPhone" />
-                <ValidationMessage For="(() => BasicInfo.PhoneNumber)" />
-
-                @* } *@
-
-            </div>
-
-            <div id="form-bio">
-                <label for="basicinfoBiography">Bio <p class="optional">(optional)</p></label>
-
-                @*                 @if (user.IsExternalAccount)
-                {
-                <textarea asp-for="BasicInfo!.Biography" disabled></textarea>
-                } *@
-     @*            else
-                { *@
-                <textarea asp-for="BasicInfo.Biography" placeholder="Enter your biography" id="basicinfoBiography"></textarea>
-                @* } *@
-            </div>
-
-            <div class="form-buttons">
-                @*                 @if (user.IsExternalAccount)
-                {
-                <button class="btn-disabled" disabled>Cancel</button>
-                <button class="btn-disabled" disabled>Save Changes</button>
-                } *@
-     @*            else
-                { *@
-                <button class="btn-gray" type="reset" onclick="location.reload();">Cancel</button>
-                <button class="btn-theme"  type="submit">Save Changes</button>
-                @* } *@
-            </div>
-        </div>
-    </EditForm>
-</section>
-<hr />
-<section class="address-info">
-    <EditForm FormName="AddressInfo" Model="Address" OnValidSubmit="UpdateAddress" method="POST" novalidate class="address-form-info">
-        <DataAnnotationsValidator />
+    <hr />
+    <section class="address-info">
         <h5 class="theme">Address info</h5>
         <div class="content">
             <div id="form-address-line_1">
                 <label for="AddressInfoAddressLine_1">Addressline 1</label>
-@*                 @if (Model.IsExternalAccount)
-                { *@
-                    @* <input asp-for="AddressInfo!.AddressLine_1" disabled /> *@
-@*                 }
-                else
-                { *@
-                <InputText @bind-Value="Address.AddressLine_1" placeholder="Enter your address" id="AddressInfoAddressLine_1" />
-                <ValidationMessage For="(() => Address.AddressLine_1)" />
-                @* } *@
+
+                <InputText @bind-Value="accountDetails.AddressLine_1" placeholder="Enter your address" id="AddressInfoAddressLine_1" />
+                <ValidationMessage For="(() => accountDetails.AddressLine_1)" />
+
             </div>
 
             <div id="form-address-line_2">
                 <label for="AddressInfoAddressLine_2">Address line 2 <p class="optional">(optional)</p> </label>
-@*                 @if (Model.IsExternalAccount)
-                {
-                    <input asp-for="AddressInfo!.AddressLine_2" disabled />
-                } *@
-@*                 else
-                { *@
-                <InputText @bind-Value="Address.AddressLine_2" placeholder="Enter your second address" id="AddressInfoAddressLine_2" />
-                @* } *@
+
+                <InputText @bind-Value="accountDetails.AddressLine_2" placeholder="Enter your second address" id="AddressInfoAddressLine_2" />
+
             </div>
 
             <div id="form-postal-code">
                 <label for="AddressInfoPostalCode">Postal Code</label>
-@*                 @if (Model.IsExternalAccount)
-                {
-                    <input asp-for="AddressInfo!.PostalCode" disabled />
-                } *@
-   @*              else
-                { *@
-                    <InputText @bind-Value="Address.PostalCode" placeholder="Enter your postalcode" id="AddressInfoPostalCode" />
-                    <ValidationMessage For="(() => Address.PostalCode)" />
-                @* } *@
+
+                <InputText @bind-Value="accountDetails.PostalCode" placeholder="Enter your postalcode" id="AddressInfoPostalCode" />
+                <ValidationMessage For="(() => accountDetails.PostalCode)" />
+
             </div>
 
             <div id="form-city">
                 <label for="AddressInfoCity">City</label>
-@*                 @if (Model.IsExternalAccount)
-                {
-                    <input asp-for="AddressInfo!.City" disabled />
-                } *@
-                @* else
-                { *@
-                    <InputText @bind-Value="Address.City" placeholder="Enter City" id="AddressInfoCity" />
-                    <ValidationMessage For="(() => Address.City)" />
 
-                @* } *@
+                <InputText @bind-Value="accountDetails.City" placeholder="Enter City" id="AddressInfoCity" />
+                <ValidationMessage For="(() => accountDetails.City)" />
+
             </div>
 
             <div class="form-buttons">
-@*                 @if (Model.IsExternalAccount)
-                {
-                    <button class="btn-disabled" disabled>Cancel</button>
-                    <button class="btn-disabled" disabled>Save Changes</button>
-                } *@
-@*                 else
-                { *@
-                    <button class="btn-gray" type="reset" onclick="location.reload();">Cancel</button>
-                    <button class="btn-theme" type="submit">Save Changes</button>
-                @* } *@
+
+                <button class="btn-gray" type="reset" onclick="location.reload();">Cancel</button>
+                <button class="btn-theme" type="submit">Save Changes</button>
+
             </div>
         </div>
-    </EditForm>
-</section>
+    </section>
+
+</EditForm>
+@if(!string.IsNullOrEmpty(StatusMessage))
+{
+    <div class="alerts alert-success">
+        @StatusMessage
+    </div>
+}
 
 
 @code {
-    private BasicInfoModel BasicInfo { get; set; } = new();
-    private AddressInfoModel AddressInfo { get; set; } = new();
+    private string? StatusMessage { get; set; }
+    private AccountDetailsModel accountDetails { get; set; } = new();
 
-
-    // [CascadingParameter]
     private ApplicationUser user { get; set; } = new();
-    public AddressEntity Address { get; set; } = new();
-    private string? username;
-    private string? phoneNumber;
 
-    [CascadingParameter]
-    private HttpContext HttpContext { get; set; } = default!;
 
-    [SupplyParameterFromForm]
-    private InputModel Input { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        // user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
-        // username = await UserManager.GetUserNameAsync(user);
-        // phoneNumber = await UserManager.GetPhoneNumberAsync(user);
+        user = await UserService.GetUserAsync();
 
-        // Input.PhoneNumber ??= phoneNumber;
+        if(user != null)
+        {
+            accountDetails.FirstName = user.FirstName;
+            accountDetails.LastName = user.LastName;
+            accountDetails.Email = user.Email!;
+            accountDetails.PhoneNumber = user.PhoneNumber;
+            accountDetails.Biography = user.Biography;
+            accountDetails.AddressLine_1 = user.Address!.AddressLine_1;
+            accountDetails.AddressLine_2 = user.Address.AddressLine_2;
+            accountDetails.PostalCode = user.Address.PostalCode;
+            accountDetails.City = user.Address.City;
+        }
+
     }
 
     private async Task OnValidSubmitAsync()
     {
-        // if (Input.PhoneNumber != phoneNumber)
-        // {
-        //     var setPhoneResult = await UserManager.SetPhoneNumberAsync(user, Input.PhoneNumber);
-        //     if (!setPhoneResult.Succeeded)
-        //     {
-        //     }
-        // }
+
 
         await SignInManager.RefreshSignInAsync(user);
     }
 
-    private sealed class InputModel
+
+    public async Task UpdateAccountDetailsInfo()
     {
-        [Phone]
-        [Display(Name = "Phone number")]
-        public string? PhoneNumber { get; set; }
+        var success = await UserService.UpdateUserAsync(accountDetails);
+        if(success)
+        {
+            StatusMessage = "User has been updated successfully";
+        }
+        else
+        {
+            StatusMessage = "Something went wrong!";
+        }
     }
 
-    public void HandleSubmit()
-    {
 
-    }
-
-    public void UpdateAddress()
-    {
-        
-    }
+    public void UploadProfileImg() {}
 }

@@ -17,7 +17,7 @@ namespace BlazorApp.Data
         public string? Biography { get; set; }
 
         public int? AddressId { get; set; }
-        public AddressEntity? Address { get; set; }
+        public virtual AddressEntity? Address { get; set; }
         
     }
 
