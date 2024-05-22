@@ -1,0 +1,326 @@
+﻿@page "/courses/{courseId}"
+@using BlazorApp.Models.GraphQL
+
+<PageTitle>Course Details</PageTitle>
+
+
+@if(course != null)
+{
+    <section class="course-details">
+        <img class="courses-showcase-img" src="@course.ImageHeaderUri" />
+        <div class="container">
+            <div class="mini-menu">
+                <a asp-action="Index" asp-controller="Home" class="home"><i class="fa-light fa-house"></i>Home</a>
+                <i class="fa-light fa-chevrons-right arrow"></i>
+                <a asp-action="Courses" asp-controller="Courses">Courses </a>
+                <i class="fa-light fa-chevrons-right arrow"></i>
+                <a asp-action="CourseDetails" asp-controller="Courses"> @course.Title</a>
+            </div>
+
+            <div class="course-showcase-text">
+                <div class="best-seller-digital">
+                    @if (course.IsBestSeller)
+                    {
+                        <p class="best-seller">Best Seller</p>
+                    }
+                    <p class="digital">Digital</p>
+                </div>
+                <h3>@course.Title</h3>
+                <p>Egestas feugiat lorem eu neque suspendisse ullacorper scelerisque aliquam mauris. </p>
+
+                <div class="rating">
+                    <div class="stars">
+                        @for(int i = 0; i <= course.StarRating; i++)
+                        {
+                            <i class="fa-solid fa-star"></i>
+                        }
+@*                         <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-solid fa-star"></i>
+                        <i class="fa-regular fa-star no-color-star"></i> *@
+                        <p>(@course.Reviews 1.2K reviews)</p>
+                        <p class="line">|</p>
+                    </div>
+                    <div class="likes">
+                        <i class="fa-light fa-thumbs-up"></i>
+                        <p>@($"{course.LikesInNumber } k likes")</p>
+                        <p class="line">|</p>
+
+                    </div>
+                    <div class="hours">
+                        <i class="fa-regular fa-clock"></i>
+                        <p>@course.HoursToComplete hours</p>
+                    </div>
+                </div>
+            </div>
+            <div class="course-author">
+                <img src="/images/courses-details/albert-flores-avatar.svg" />
+                <div class="created-by">
+                    <p>Created by</p>
+                    <p>@course.Authors!.AuthorName</p>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="course-description">
+                    <h3> Course Description</h3>
+                    <p>@course.Content!.Description</p>
+
+                    <h4>What you'll learn</h4>
+                    @if(course.Content != null)
+                    {
+                        @foreach(var include in course.Content.Includes!)
+                        {
+                            <p><i class="fa-sharp fa-regular fa-circle-check"></i>@include.</p>
+                        }
+                       
+                    }
+                   @*  <p><i class="fa-sharp fa-regular fa-circle-check"></i>Sed lectus donec amet eu turpis interdum.</p>
+
+                    <p><i class="fa-sharp fa-regular fa-circle-check"></i>Nulla at consectetur vitae dignissim porttitor.</p>
+
+                    <p><i class="fa-sharp fa-regular fa-circle-check"></i>Phasellus id vitae dui aliquet mi.</p>
+
+                    <p><i class="fa-sharp fa-regular fa-circle-check"></i>Integer cursus vitae, odio feugiat iaculis aliquet diam, et purus.</p>
+
+                    <p><i class="fa-sharp fa-regular fa-circle-check"></i>In aenean dolor diam tortor orci eu.</p> *@
+                </div>
+
+
+                <div class="side-content">
+                    <h5>This course includes:</h5>
+                    <p> <i class="fa-solid fa-display"></i>@course.Content!.Includes @* hours on-demand video *@</p>
+                    <p><i class="fa-light fa-file-lines"></i>18 articles</p>
+                    <p><i class="fa-light fa-arrow-down-to-bracket"></i>25 downloadable resources</p>
+                    <p><i class="fa-light fa-infinity"></i>Full lifetime access</p>
+                    <p><i class="fa-sharp fa-light fa-trophy"></i>Certificate of completion</p>
+                    
+
+
+                    <div class="price">
+                        @if (course.Prices!.DiscountedPrice == 0)
+                        {
+                            <h5>$@course.Prices.Price</h5>
+                        }
+                        else
+                        {
+                            <h5 class="discounted-price"> $@course.Prices.DiscountedPrice</h5> <span>$@course.Prices.Price</span>
+                        }
+                    </div>
+                    <a href="#"><button class="btn-theme">Join course</button></a>
+                </div>
+            </div>
+
+            <div class="program-details">
+                <h3>Program Details</h3>
+                <div class="numbers">
+                    <span class="line"></span>
+                    <div class="box">
+                        <img src="/images/courses-details/1.svg" class="numbers-img" />
+
+                        @foreach(var details in course.Content.ProgramDetails!)
+                        {
+                            <div class="box-content">
+                                <h5>@details.Title </h5>
+                                <p>@details.Description </p>
+                            </div>
+                        }
+@*                         <div class="box-content">
+                            <h5>Introduction. Getting started</h5>
+                            <p>Nulla faucibus mauris pellentesque blandit faucibus non. Sit ut et at suspendisse gravida hendrerit tempus placerat</p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="~/images/courses-details/2.svg" class="numbers-img" />
+
+                        <div class="box-content">
+                            <h5>The ultimate HTML developer: advanced HTML</h5>
+                            <p>Lobortis diam elit id nibh ultrices sed penatibus donec. Nibh iaculis eu sit cras ultricies. Nam eu eget etiam egestas donec scelerisque ut ac enim. Vitae ac nisl, enim nec accumsan vitae est.</p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="~/images/courses-details/3.svg" class="numbers-img" />
+
+                        <div class="box-content">
+                            <h5>CSS & CSS3: basic</h5>
+                            <p>Duis euismod enim, facilisis risus tellus pharetra lectus diam neque. Nec ultrices mi faucibus est. Magna ullamcorper potenti elementum ultricies auctor nec volutpat augue.</p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="~/images/courses-details/4.svg" class="numbers-img" />
+
+                        <div class="box-content">
+                            <h4>JavaScript basics for beginners</h4>
+                            <p>Morbi porttitor risus imperdiet a, nisl mattis. Amet, faucibus eget in platea vitae, velit, erat eget velit. At lacus ut proin erat.</p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="~/images/courses-details/5.svg" class="numbers-img" />
+
+                        <div class="box-content">
+                            <h5>Understanding APIs</h5>
+                            <p>Risus morbi euismod in congue scelerisque fusce pellentesque diam consequat. Nisi mauris nibh sed est morbi amet arcu urna. Malesuada feugiat quisque consectetur elementum diam vitae. Dictumst facilisis odio eu quis maecenas risus odio fames bibendum.</p>
+                        </div>
+                    </div>
+                    <div class="box">
+                        <img src="~/images/courses-details/6.svg" class="numbers-img" />
+
+                        <div class="box-content">
+                            <h5>C# and .NET from beginner to advanced</h5>
+                            <p>Quis risus quisque diam diam. Volutpat neque eget eu faucibus sed urna fermentum risus. Est, mauris morbi nibh massa.</p>
+                        </div>
+                    </div> *@
+                </div>
+
+               @*  <div class="author">
+                    <img src="~/images/courses-details/bg-author-pattern.svg" class="background-pattern" />
+                    <div class="author-info">
+                            <img src="/images/courses-details/albert-flores-avatar.svg" />
+
+
+                        <div class="author-content">
+                            <p>@course.Author.AuthorTitle</p>
+                            <h2>@Model.Author.AuthorName</h2>
+                            <p class="author-description">@Model.Author.AuthorDescription</p>
+
+                            <div class="buttons">
+                                <a href="#"><button class="youtube-btn"><i class="fa-brands fa-youtube"></i> @($"{Model.Author.YoutubeSubs / 1000:0}k subscribers")</button></a>
+
+                                <a href="#"><button class="facebook-btn"><i class="fa-brands fa-square-facebook"></i> @($"{Model.Author.FacebookSubs / 1000:0}k followers")</button></a>
+                            </div>
+                        </div>
+
+                    </div>
+                </div> *@
+
+            </div>
+        </div>
+        </div>
+    </section>
+}
+else
+{
+    <p>Loading...</p>
+}
+
+@code {
+    private string? StatusMessage { get; set; }
+    private CourseModel? course { get; set; }
+
+    [Parameter]
+    public string? courseId { get; set; }
+
+
+    protected override async Task OnInitializedAsync()
+    {
+
+        await GetCourseDetailsWithGraphQLAsync();
+    }
+
+    private async Task<CourseModel> GetCourseDetailsWithGraphQLAsync()
+    {
+        var query = new GraphQLQuery
+        {
+            // Query = $"{{ getCourseById(id: \"{courseId}\") {{ id title ingress reviews imageUri imageHeaderUri categories starRating likesInNumber likesInPercent hoursToComplete isDigital isBestSeller authors {{ authorName }} prices {{ price discountedPrice currency }} content {{ description includes programDetails {{ id title description }} }} }} }}"
+
+
+
+            Query = @"
+                query getCourseById($id: String!) {
+                getCourseById(id: $id) {
+                    id
+                    title
+                    ingress
+                    reviews
+                    imageUri
+                    imageHeaderUri
+                    categories
+
+                    starRating
+                    likesInPercent
+                    likesInNumber
+                    hoursToComplete
+
+                    isBestSeller
+                    isDigital
+
+                    authors {
+                      authorName
+                    }
+
+                    prices {
+                      price
+                      discountedPrice
+                      currency
+                    }
+
+                    content {
+                      description
+                      includes
+                      programDetails {
+                          id
+                        title
+                        description
+                      }
+                    }
+
+
+                  }
+                }
+            ",
+            Variables = new {id = courseId}
+            };
+        var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);
+        var responseContent = await response.Content.ReadAsStringAsync();
+
+        if(response.IsSuccessStatusCode)
+        {
+            var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
+            if(result!.Data.TryGetProperty("getCourseById", out var courseData))
+            {
+                course = new CourseModel
+                    {
+                        Id = courseData.GetProperty("id").GetString()!,
+                        Title = courseData.GetProperty("title").GetString(),
+                        Ingress = courseData.GetProperty("ingress").GetString(),
+                        Reviews = courseData.GetProperty("reviews").GetString(),
+                        ImageUri = courseData.GetProperty("imageUri").GetString(),
+                        ImageHeaderUri = courseData.GetProperty("imageHeaderUri").GetString(),
+                        Categories = courseData.GetProperty("categories").EnumerateArray().Select(c => c.GetString()!).ToArray(),
+                        StarRating = courseData.GetProperty("starRating").GetDecimal(),
+                        LikesInNumber = courseData.GetProperty("likesInNumber").GetDecimal(),
+                        LikesInPercent = courseData.GetProperty("likesInPercent").GetDecimal(),
+                        HoursToComplete = courseData.GetProperty("hourstoComplete").GetDecimal(),
+                        IsDigital = courseData.GetProperty("isDigital").GetBoolean(),
+                        IsBestSeller = courseData.GetProperty("isBestSeller").GetBoolean(),
+                        Authors = courseData.GetProperty("authors").EnumerateArray().Select(x => new Authors
+                        {
+                            AuthorName = x.GetProperty("authorName").GetString()
+                        }).FirstOrDefault(),
+                        Prices = courseData.GetProperty("prices").EnumerateArray().Select(x => new Prices
+                        {
+                            Price = x.GetProperty("price").GetDecimal(),
+                            DiscountedPrice = x.GetProperty("discountedPrice").GetDecimal(),
+                            Currency = x.GetProperty("currency").GetString()
+
+                        }).FirstOrDefault(),
+                        Content = new Content
+                        {
+                            Description = courseData.GetProperty("content").GetProperty("description").GetString(),
+                            Includes = courseData.GetProperty("content").GetProperty("includes").EnumerateArray().Select(x => x.GetString()).ToArray()!,
+                            ProgramDetails = courseData.GetProperty("content").GetProperty("programDetails").EnumerateArray().Select(x => new ProgramDetails
+                            {
+                                Id = x.GetProperty("id").GetInt32(),
+                                Title = x.GetProperty("title").GetString(),
+                                Description = x.GetProperty("description").GetString()
+                            }).ToList(),
+                        }
+                };
+                return course ?? new CourseModel();
+            }
+        }
+        return null!;
+
+    }
+}

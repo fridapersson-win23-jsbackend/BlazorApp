@@ -108,7 +108,7 @@
                             </div>
                         </div>
                         @* @await Html.PartialAsync("~/Views/Courses/Components/_CourseCardPartial.cshtml", course) *@
-                        <CourseCard />
+                        @* <CourseCard /> *@
                     }
                 </div>
                 @* @await Html.PartialAsync("~/Views/Courses/Components/_PaginationPartial.cshtml") *@
@@ -139,7 +139,8 @@
         try
         {
             var query = new GraphQLQuery { Query = "{getCourses { id isBestSeller title imageUri authors {authorName} prices {price discountedPrice } hoursToComplete likesInNumber likesInPercent }}" };
-            var response = await Http.PostAsJsonAsync("http://localhost:7165/api/graphql?code=t2eEbS8Z7A-C75_nRjOqyB49imn9WNt7J4MDlD52V9GRAzFuK1KNfA==", query);
+            var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);
+            var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
             {
@@ -162,7 +163,7 @@
         }
         catch (Exception ex)
         {
-            
+            Console.WriteLine(ex.Message);
         }
     }
 }
