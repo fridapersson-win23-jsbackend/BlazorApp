@@ -166,10 +166,14 @@
             accountDetails.Email = user.Email!;
             accountDetails.PhoneNumber = user.PhoneNumber;
             accountDetails.Biography = user.Biography;
-            accountDetails.AddressLine_1 = user.Address!.AddressLine_1;
-            accountDetails.AddressLine_2 = user.Address.AddressLine_2;
-            accountDetails.PostalCode = user.Address.PostalCode;
-            accountDetails.City = user.Address.City;
+
+            if (user.Address != null)
+            {
+                accountDetails.AddressLine_1 = user.Address.AddressLine_1;
+                accountDetails.AddressLine_2 = user.Address.AddressLine_2;
+                accountDetails.PostalCode = user.Address.PostalCode;
+                accountDetails.City = user.Address.City;
+            }
         }
 
     }

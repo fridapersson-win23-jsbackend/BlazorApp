@@ -1,6 +1,7 @@
 using BlazorApp;
 using BlazorApp.Components;
 using BlazorApp.Data;
+using BlazorApp.Hubs;
 using BlazorApp.Services;
 using BlazorWebbApp.Services;
 using Microsoft.AspNetCore.Components.Authorization;
@@ -59,6 +60,11 @@ builder.Services.AddIdentityCore<ApplicationUser>(options => options.SignIn.Requ
     .AddDefaultTokenProviders();
 
 
+
+
+builder.Services.AddSignalR();
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -84,5 +90,7 @@ app.MapRazorComponents<App>()
     .AddInteractiveWebAssemblyRenderMode()
     .AddAdditionalAssemblies(typeof(BlazorApp.Client._Imports).Assembly);
 
+
+app.MapHub<ChatHub>("/chathub");
 
 app.Run();

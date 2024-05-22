@@ -38,7 +38,7 @@ public class AccountDetailsModel
     [Required(ErrorMessage = "Invalid Address")]
     [Display(Name = "Address line 1", Prompt = "Enter a addressline")]
     [DataType(DataType.Text)]
-    public string AddressLine_1 { get; set; } = null!;
+    public string? AddressLine_1 { get; set; } = "";
 
 
     [Display(Name = "Address line 2", Prompt = "Enter your second addressline")]

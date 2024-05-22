@@ -1,0 +1,118 @@
+﻿@page "/chat"
+@rendermode InteractiveAuto
+
+@using Microsoft.AspNetCore.SignalR.Client
+
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<PageTitle>Chat</PageTitle>
+
+<section class="chatSection">
+    <div class="container">
+        <div class="chatHeader">
+            <h2>Chat</h2>
+        </div>
+        <div class="card">
+            <div class="body">
+                <ul class="list-group">
+                    @foreach (var message in messages)
+                    {
+                        <li class="mb-3 list-group-item @(message.UserName == userName ? "chat-right" : "chat-left")">
+                            <div>
+                                <strong>@message.UserName</strong> <span>@message.Created.ToString("HH:mm")</span>
+                            </div>
+                            <div>@message.Message</div>
+                        </li>
+                    }
+                </ul>
+                <div class="cardFooter">
+                    <div class="mt-2">
+                        <textarea class="form-controll" placeholder="Message" @bind="currentMessage" @oninput="NotifyTyping"></textarea>
+                    </div>
+                    <div class="send-message">
+                        <button class="btn-theme" @onclick="Send">Send Message</button>
+                    </div>
+                </div>
+                @if (!string.IsNullOrEmpty(typingUser))
+                {
+                    <div class="typing-indicator">@typingUser is typing...</div>
+                }
+            </div>
+        </div>
+    </div>
+</section>
+
+@code {
+    private HubConnection? connection;
+    private bool IsConnected => connection?.State == HubConnectionState.Connected;
+    private string? userName;
+    private string? typingUser;
+    private System.Timers.Timer? typingTimer;
+
+    private List<ChatMessage> messages = new();
+    private string? currentMessage;
+
+    private class ChatMessage
+    {
+        public string? Message { get; set; }
+        public string? UserName { get; set; }
+        public DateTime Created { get; set; } = DateTime.Now;
+    }
+
+    private async Task NotifyTyping() => await connection!.SendAsync("Typing", userName);
+
+    private async Task Send()
+    {
+        if (!string.IsNullOrEmpty(currentMessage))
+        {
+            var message = new ChatMessage { UserName = userName, Message = currentMessage, Created = DateTime.Now };
+            // messages.Add(message);
+            await connection!.SendAsync("SendMessageToAll", message.UserName, message.Message, message.Created);
+            currentMessage = "";
+        }
+    }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var user = authState.User;
+        if (user.Identity?.IsAuthenticated ?? false)
+        {
+            userName = user.Identity.Name;
+        }
+        else
+        {
+            userName = "Unknown";
+        }
+
+        connection = new HubConnectionBuilder().WithUrl(NavigationManager.ToAbsoluteUri("/chathub")).Build();
+
+        connection.On<string, /* string?, */ string, DateTime>("ReceiveMessage", (fromUser, /* toUser ,*/ message, dateTime) =>
+        {
+            var newMessage = new ChatMessage { UserName = fromUser, Message = message, Created = dateTime };
+            messages.Add(newMessage);
+
+            InvokeAsync(StateHasChanged);
+        });
+
+
+        connection.On<string>("UserTyping", (typingUserName) =>
+        {
+            typingUser = typingUserName;
+            InvokeAsync(StateHasChanged);
+
+            typingTimer?.Stop();
+            typingTimer = new System.Timers.Timer(2000);
+            typingTimer.Elapsed += (s, e) =>
+            {
+                typingUser = null!;
+                InvokeAsync(StateHasChanged);
+            };
+
+            typingTimer.Start();
+        });
+
+        await connection.StartAsync();
+    }
+}

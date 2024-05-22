@@ -96,17 +96,6 @@
 </section>
 
 @code {
-    // private SubscriberModel subscribeModel = new SubscriberModel
-    // {
-    //     Id = "subscribe",
-    //     Title = "Don't Want to Miss Anything?",
-    //     Image = new ImageModel { ImageUrl = "./images/home/background-line.svg", AltText = "Background image" },
-    //     Description = "Sign up for Newsletters",
-    //     AgreeToTerms = new LinkModel { Text = "terms" },
-    //     PrivacyPolicy = new LinkModel { Text = "privacy policy" },
-
-    // };
-
     [SupplyParameterFromQuery]
     public string StatusMessage { get; set; } = null!;
 

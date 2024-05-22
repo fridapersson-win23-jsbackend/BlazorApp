@@ -26,7 +26,7 @@ namespace BlazorApp.Data
         public int Id { get; set; }
 
         [Required]
-        public string AddressLine_1 { get; set; } = null!;
+        public string AddressLine_1 { get; set; } = ""!;
 
         public string? AddressLine_2 { get; set; }
 

@@ -139,7 +139,7 @@
         try
         {
             var query = new GraphQLQuery { Query = "{getCourses { id isBestSeller title imageUri authors {authorName} prices {price discountedPrice } hoursToComplete likesInNumber likesInPercent }}" };
-            var response = await Http.PostAsJsonAsync("http://localhost:7165/api/graphql", query);
+            var response = await Http.PostAsJsonAsync("http://localhost:7165/api/graphql?code=t2eEbS8Z7A-C75_nRjOqyB49imn9WNt7J4MDlD52V9GRAzFuK1KNfA==", query);
 
             if (response.IsSuccessStatusCode)
             {

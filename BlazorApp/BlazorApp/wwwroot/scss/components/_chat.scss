@@ -1,0 +1,31 @@
+.container {
+
+
+
+    .chat-right {
+        display: flex;
+        justify-content: flex-end;
+        align-items: flex-end;
+        /*width: 70%;*/
+        text-align: right;
+        justify-content: right;
+        align-content: flex-end;
+        align-items: end;
+        background-color: var(--color-theme);
+        color: var(--color-gray-000);
+        border-radius: .8rem;
+        padding: 1rem;
+        margin-left: auto;
+    }
+
+    .chat-left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: flex-start;
+        text-align: left;
+        background-color: var(--color-gray-200);
+        border-radius: .8rem;
+        padding: 1rem;
+        margin-left: auto;
+    }
+}
