@@ -78,6 +78,8 @@ public class UserService
         {
             using var scope = _scopeFactory.CreateScope();
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
 
             if (userManager != null)
             {
@@ -89,15 +91,32 @@ public class UserService
                     user.PhoneNumber = accountDetails.PhoneNumber;
                     user.Biography = accountDetails.Biography;
 
-                    if (user.Address == null)
-                    {
-                        user.Address = new AddressEntity();
-                    }
+                    
+                    var existingAddress = await dbContext.Addresses
+                        .FirstOrDefaultAsync(a => a.AddressLine_1 == accountDetails.AddressLine_1 &&
+                                                  a.AddressLine_2 == accountDetails.AddressLine_2 &&
+                                                  a.PostalCode == accountDetails.PostalCode &&
+                                                  a.City == accountDetails.City);
 
-                    user.Address.AddressLine_1 = accountDetails.AddressLine_1;
-                    user.Address.AddressLine_2 = accountDetails.AddressLine_2;
-                    user.Address.PostalCode = accountDetails.PostalCode;
-                    user.Address.City = accountDetails.City;
+                    if (existingAddress != null)
+                    {
+                        user.AddressId = existingAddress.Id;
+                    }
+                    else
+                    {
+                        var newAddress = new AddressEntity
+                        {
+                            AddressLine_1 = accountDetails.AddressLine_1,
+                            AddressLine_2 = accountDetails.AddressLine_2,
+                            PostalCode = accountDetails.PostalCode,
+                            City = accountDetails.City
+                        };
+
+                        dbContext.Addresses.Add(newAddress);
+                        await dbContext.SaveChangesAsync();
+
+                        user.AddressId = newAddress.Id;
+                    }
 
                     var result = await userManager.UpdateAsync(user);
                     return result.Succeeded;

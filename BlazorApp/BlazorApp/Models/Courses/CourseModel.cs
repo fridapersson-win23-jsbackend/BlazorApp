@@ -16,7 +16,7 @@
 
 
     public virtual Prices? Prices { get; set; }
-    public virtual Authors? Authors { get; set; }
+    public virtual List<Authors>? Authors { get; set; }
     public virtual Content? Content { get; set; }
 
     //public virtual List<Categories>? Categories { get; set; }

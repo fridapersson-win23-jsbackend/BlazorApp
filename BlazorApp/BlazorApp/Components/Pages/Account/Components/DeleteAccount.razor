@@ -1,0 +1,79 @@
+﻿@* @using BlazorApp.Services
+@using BlazorProject.Models.Helpers
+@rendermode InteractiveServer
+@inject UserService UserService 
+@inject NavigationManager NavigationManager
+
+<div>
+    <p class="alert-success">@StatusMessage</p>
+</div>
+<div>
+    <p class="alert-danger-dark">@ErrorMessage</p>
+</div>
+<EditForm Model="DeleteAccountForm" FormName="DeleteAccount" OnValidSubmit="DeleteAccountAsync" class="delete-account-form"  method="POST" novalidate>
+    <DataAnnotationsValidator />
+    <div class="checkbox terms-and-conditions" id="checkbox" type="checkbox">
+        <InputCheckbox @bind-Value="DeleteAccountForm.ConfirmDeleteAccount" class="form-input" type="checkbox"  />
+        <label for="DeleteAccount" >Yes, I want to delete my account.</label>
+
+    </div>
+    <ValidationMessage For="() => DeleteAccountForm.ConfirmDeleteAccount" />
+
+    <button type="submit" class="delete-btn">Delete</button>
+</EditForm>
+
+@code {
+    private string? StatusMessage { get; set; }
+    private string? ErrorMessage { get; set; }
+    private ApplicationUser user = default!;
+    private DeleteAccountModel DeleteAccountForm { get; set; } = new();
+
+    [CascadingParameter]
+    private HttpContext HttpContext { get; set; } = default!;
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        user = await UserManager.GetUserAsync(HttpContext.User) ?? null!;
+    }
+
+
+    private async Task DeleteAccountAsync()
+    {
+        try
+        {
+            var user = await UserService.GetUserAsync();
+            if(user != null)
+            {
+                var deleteUser = await UserManager.DeleteAsync(user);
+                if(deleteUser.Succeeded)
+                {
+                    StatusMessage = "Account had been deleted, navigating to homepage";
+                    NavigationManager.NavigateTo("/");
+                    await Task.Delay(2000);
+                }
+                else
+                {
+                    ErrorMessage = "Couldn't delete account";
+                }
+            }
+
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+
+    public class DeleteAccountModel
+    {
+        [Required]
+        [Display(Name = "Delete confirm")]
+        [RequiredCheckbox(ErrorMessage = "You must check the box if you want to delte your account")]
+        public bool ConfirmDeleteAccount { get; set; } = false;
+    }
+
+}
+
+ *@

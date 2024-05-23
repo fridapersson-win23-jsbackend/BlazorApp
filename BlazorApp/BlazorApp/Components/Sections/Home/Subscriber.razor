@@ -89,7 +89,8 @@
             { *@
                 <p><span class="asterix">*</span> Yes, I agree to the <a href="#">terms</a> and <a href="#">privacy policy</a>.</p>
             @* } *@
-            <span class="alert-danger-dark">@StatusMessage</span>
+            <span class="alerts alert-success">@StatusMessage</span>
+            <span class="alerts alert-danger-dark">@ErrorMessage</span>
 
         </span>
     </div>
@@ -97,7 +98,8 @@
 
 @code {
     [SupplyParameterFromQuery]
-    public string StatusMessage { get; set; } = null!;
+    private string? StatusMessage { get; set; }
+    private string? ErrorMessage { get; set; }
 
 
     [SupplyParameterFromForm]
@@ -121,13 +123,13 @@
             else
             {
                 var responseContent = await result.Content.ReadAsStringAsync();
-                StatusMessage = $"Error: {result.StatusCode}, Details: {responseContent}";
+                ErrorMessage = $"Error: {result.StatusCode}, Details: {responseContent}";
             }
         }
         catch (Exception ex)
         {
             Console.WriteLine(ex.Message);
-            StatusMessage = $"{ex.Message} :: An error occurd please try again";
+            ErrorMessage = $"{ex.Message} :: An error occurd please try again";
         }
         SubscribeForm = new SubscriberFormModel();
     }

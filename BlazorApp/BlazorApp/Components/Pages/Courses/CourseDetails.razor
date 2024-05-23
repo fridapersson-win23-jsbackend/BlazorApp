@@ -10,9 +10,9 @@
         <img class="courses-showcase-img" src="@course.ImageHeaderUri" />
         <div class="container">
             <div class="mini-menu">
-                <a asp-action="Index" asp-controller="Home" class="home"><i class="fa-light fa-house"></i>Home</a>
+                <a href="/" asp-action="Index" asp-controller="Home" class="home"><i class="fa-light fa-house"></i>Home</a>
                 <i class="fa-light fa-chevrons-right arrow"></i>
-                <a asp-action="Courses" asp-controller="Courses">Courses </a>
+                <a href="/courses" asp-action="Courses" asp-controller="Courses">Courses </a>
                 <i class="fa-light fa-chevrons-right arrow"></i>
                 <a asp-action="CourseDetails" asp-controller="Courses"> @course.Title</a>
             </div>
@@ -23,10 +23,13 @@
                     {
                         <p class="best-seller">Best Seller</p>
                     }
-                    <p class="digital">Digital</p>
+                    @if(course.IsDigital)
+                    {
+                        <p class="digital">Digital</p>  
+                    }
                 </div>
                 <h3>@course.Title</h3>
-                <p>Egestas feugiat lorem eu neque suspendisse ullacorper scelerisque aliquam mauris. </p>
+                <p>@course.Ingress</p>
 
                 <div class="rating">
                     <div class="stars">
@@ -39,12 +42,12 @@
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-solid fa-star"></i>
                         <i class="fa-regular fa-star no-color-star"></i> *@
-                        <p>(@course.Reviews 1.2K reviews)</p>
+                        <p>(@course.Reviews reviews)</p>
                         <p class="line">|</p>
                     </div>
                     <div class="likes">
                         <i class="fa-light fa-thumbs-up"></i>
-                        <p>@($"{course.LikesInNumber } k likes")</p>
+                        <p>@($"{(course.LikesInNumber / 1000)}k likes")</p>
                         <p class="line">|</p>
 
                     </div>
@@ -58,7 +61,12 @@
                 <img src="/images/courses-details/albert-flores-avatar.svg" />
                 <div class="created-by">
                     <p>Created by</p>
-                    <p>@course.Authors!.AuthorName</p>
+                    <p>
+                        @foreach(var author in course.Authors!)
+                        {
+                            <p>@author.AuthorName</p>
+                        }
+                    </p>
                 </div>
             </div>
 
@@ -90,11 +98,15 @@
 
                 <div class="side-content">
                     <h5>This course includes:</h5>
-                    <p> <i class="fa-solid fa-display"></i>@course.Content!.Includes @* hours on-demand video *@</p>
+                    @foreach(var include in course.Content!.Includes!)
+                    {
+                        <p> <i class="fa-solid fa-display"></i>@include @* hours on-demand video *@</p>
+                    }
+@*                     <p> <i class="fa-solid fa-display"></i>@course.Content!.Includes </p>
                     <p><i class="fa-light fa-file-lines"></i>18 articles</p>
                     <p><i class="fa-light fa-arrow-down-to-bracket"></i>25 downloadable resources</p>
                     <p><i class="fa-light fa-infinity"></i>Full lifetime access</p>
-                    <p><i class="fa-sharp fa-light fa-trophy"></i>Certificate of completion</p>
+                    <p><i class="fa-sharp fa-light fa-trophy"></i>Certificate of completion</p> *@
                     
 
 
@@ -117,14 +129,19 @@
                 <div class="numbers">
                     <span class="line"></span>
                     <div class="box">
-                        <img src="/images/courses-details/1.svg" class="numbers-img" />
+                        @* <img src="/images/courses-details/1.svg" class="numbers-img" /> *@
 
                         @foreach(var details in course.Content.ProgramDetails!)
                         {
-                            <div class="box-content">
-                                <h5>@details.Title </h5>
-                                <p>@details.Description </p>
-                            </div>
+                            <ul>
+                                <div class="box-content">
+                                    <li>
+                                        <h5>@details.Title </h5>
+                                        <p>@details.Description </p>
+                                    </li>
+                                </div>
+                            </ul>
+
                         }
 @*                         <div class="box-content">
                             <h5>Introduction. Getting started</h5>
@@ -205,120 +222,129 @@ else
 }
 
 @code {
-    private string? StatusMessage { get; set; }
-    private CourseModel? course { get; set; }
-
     [Parameter]
     public string? courseId { get; set; }
 
+    private CourseModel? course { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
-
-        await GetCourseDetailsWithGraphQLAsync();
+        Console.WriteLine("Initializing with courseId: " + courseId);
+        course = await GetCourseDetailsWithGraphQLAsync(courseId);
+        Console.WriteLine("Course data fetched: " + (course != null));
     }
 
-    private async Task<CourseModel> GetCourseDetailsWithGraphQLAsync()
+    private async Task<CourseModel?> GetCourseDetailsWithGraphQLAsync(string? courseId)
     {
-        var query = new GraphQLQuery
+        if (string.IsNullOrEmpty(courseId))
         {
-            // Query = $"{{ getCourseById(id: \"{courseId}\") {{ id title ingress reviews imageUri imageHeaderUri categories starRating likesInNumber likesInPercent hoursToComplete isDigital isBestSeller authors {{ authorName }} prices {{ price discountedPrice currency }} content {{ description includes programDetails {{ id title description }} }} }} }}"
+            Console.WriteLine("courseId is null or empty.");
+            return null;
+        }
 
-
-
-            Query = @"
+        var query = new GraphQLQuery
+            {
+                Query = @"
                 query getCourseById($id: String!) {
-                getCourseById(id: $id) {
-                    id
-                    title
-                    ingress
-                    reviews
-                    imageUri
-                    imageHeaderUri
-                    categories
-
-                    starRating
-                    likesInPercent
-                    likesInNumber
-                    hoursToComplete
-
-                    isBestSeller
-                    isDigital
-
-                    authors {
-                      authorName
-                    }
-
-                    prices {
-                      price
-                      discountedPrice
-                      currency
-                    }
-
-                    content {
-                      description
-                      includes
-                      programDetails {
-                          id
+                    getCourseById(id: $id) {
+                        id
                         title
-                        description
-                      }
+                        ingress
+                        reviews
+                        imageUri
+                        imageHeaderUri
+                        categories
+                        starRating
+                        likesInPercent
+                        likesInNumber
+                        hoursToComplete
+                        isBestSeller
+                        isDigital
+                        authors {
+                            authorName
+                        }
+                        prices {
+                            price
+                            discountedPrice
+                            currency
+                        }
+                        content {
+                            description
+                            includes
+                            learnPoints
+                            programDetails {
+                                id
+                                title
+                                description
+                            }
+                        }
                     }
-                  }
                 }
             ",
-            Variables = new {id = courseId}
+                Variables = new { id = courseId }
             };
-        var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);
-        var responseContent = await response.Content.ReadAsStringAsync();
 
-        if(response.IsSuccessStatusCode)
+        try
         {
-            var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
-            if(result!.Data.TryGetProperty("getCourseById", out var courseData))
-            {
-                course = new CourseModel
-                    {
-                        Id = courseData.GetProperty("id").GetString()!,
-                        Title = courseData.GetProperty("title").GetString(),
-                        Ingress = courseData.GetProperty("ingress").GetString(),
-                        Reviews = courseData.GetProperty("reviews").GetString(),
-                        ImageUri = courseData.GetProperty("imageUri").GetString(),
-                        ImageHeaderUri = courseData.GetProperty("imageHeaderUri").GetString(),
-                        Categories = courseData.GetProperty("categories").EnumerateArray().Select(c => c.GetString()!).ToArray(),
-                        StarRating = courseData.GetProperty("starRating").GetDecimal(),
-                        LikesInNumber = courseData.GetProperty("likesInNumber").GetDecimal(),
-                        LikesInPercent = courseData.GetProperty("likesInPercent").GetDecimal(),
-                        HoursToComplete = courseData.GetProperty("hourstoComplete").GetDecimal(),
-                        IsDigital = courseData.GetProperty("isDigital").GetBoolean(),
-                        IsBestSeller = courseData.GetProperty("isBestSeller").GetBoolean(),
-                        Authors = courseData.GetProperty("authors").EnumerateArray().Select(x => new Authors
-                        {
-                            AuthorName = x.GetProperty("authorName").GetString()
-                        }).FirstOrDefault(),
-                        Prices = courseData.GetProperty("prices").EnumerateArray().Select(x => new Prices
-                        {
-                            Price = x.GetProperty("price").GetDecimal(),
-                            DiscountedPrice = x.GetProperty("discountedPrice").GetDecimal(),
-                            Currency = x.GetProperty("currency").GetString()
+            var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);
+            var responseContent = await response.Content.ReadAsStringAsync();
+            Console.WriteLine("Response content: " + responseContent);
 
-                        }).FirstOrDefault(),
-                        Content = new Content
+            if (response.IsSuccessStatusCode)
+            {
+                var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
+                if (result!.Data.TryGetProperty("getCourseById", out var courseData))
+                {
+                    Console.WriteLine("Found 'getCourseById' property in JSON response");
+
+                    var courseModel = new CourseModel
                         {
-                            Description = courseData.GetProperty("content").GetProperty("description").GetString(),
-                            Includes = courseData.GetProperty("content").GetProperty("includes").EnumerateArray().Select(x => x.GetString()).ToArray()!,
-                            ProgramDetails = courseData.GetProperty("content").GetProperty("programDetails").EnumerateArray().Select(x => new ProgramDetails
+                            Id = courseData.GetProperty("id").GetString()!,
+                            Title = courseData.GetProperty("title").GetString(),
+                            Ingress = courseData.GetProperty("ingress").GetString(),
+                            Reviews = courseData.GetProperty("reviews").GetString(),
+                            ImageUri = courseData.GetProperty("imageUri").GetString(),
+                            ImageHeaderUri = courseData.GetProperty("imageHeaderUri").GetString(),
+                            Categories = courseData.GetProperty("categories").EnumerateArray().Select(c => c.GetString()!).ToArray(),
+                            StarRating = courseData.GetProperty("starRating").GetDecimal(),
+                            LikesInNumber = courseData.GetProperty("likesInNumber").GetDecimal(),
+                            LikesInPercent = courseData.GetProperty("likesInPercent").GetDecimal(),
+                            HoursToComplete = courseData.GetProperty("hoursToComplete").GetDecimal(),
+                            IsBestSeller = courseData.GetProperty("isBestSeller").GetBoolean(),
+                            IsDigital = courseData.GetProperty("isDigital").GetBoolean(),
+                            Authors = courseData.GetProperty("authors").EnumerateArray().Select(a => new Authors
                             {
-                                Id = x.GetProperty("id").GetInt32(),
-                                Title = x.GetProperty("title").GetString(),
-                                Description = x.GetProperty("description").GetString()
+                                AuthorName = a.GetProperty("authorName").GetString()
                             }).ToList(),
-                        }
-                };
-                return course ?? new CourseModel();
+                            Prices = courseData.GetProperty("prices").GetProperty("price").GetDecimal() != 0 ? new Prices
+                            {
+                                Price = courseData.GetProperty("prices").GetProperty("price").GetDecimal(),
+                                DiscountedPrice = courseData.GetProperty("prices").GetProperty("discountedPrice").GetDecimal(),
+                                Currency = courseData.GetProperty("prices").GetProperty("currency").GetString()
+                            } : null,
+                            Content = new Content
+                            {
+                                Description = courseData.GetProperty("content").GetProperty("description").GetString(),
+                                Includes = courseData.GetProperty("content").GetProperty("includes").EnumerateArray().Select(x => x.GetString()).ToArray()!,
+                                LearnPoints = courseData.GetProperty("content").GetProperty("learnPoints").EnumerateArray().Select(x => x.GetString()).ToArray()!,
+                                ProgramDetails = courseData.GetProperty("content").GetProperty("programDetails").EnumerateArray().Select(x => new ProgramDetails
+                                {
+                                    Id = x.GetProperty("id").GetInt32(),
+                                    Title = x.GetProperty("title").GetString(),
+                                    Description = x.GetProperty("description").GetString()
+                                }).ToList()
+                            }
+                        };
+
+                    return courseModel;
+                }
             }
         }
-        return null!;
+        catch (Exception ex)
+        {
+            Console.WriteLine("Error fetching course details: " + ex.Message);
+        }
 
+        return null;
     }
 }

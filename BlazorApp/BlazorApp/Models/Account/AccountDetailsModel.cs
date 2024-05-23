@@ -4,15 +4,17 @@ namespace BlazorApp.Models.Account;
 
 public class AccountDetailsModel
 {
+    [Display(Name = "First name", Prompt = "Enter your first name")]
     [Required(ErrorMessage = "Invalid first name")]
     [DataType(DataType.Text)]
-    [Display(Name = "First name", Prompt = "Enter your first name")]
+    [MinLength(2, ErrorMessage = "First name is to short")]
     public string FirstName { get; set; } = null!;
 
 
+    [Display(Name = "Last name", Prompt = "Enter your last name")]
     [Required(ErrorMessage = "Invalid last name")]
     [DataType(DataType.Text)]
-    [Display(Name = "Last name", Prompt = "Enter your last name")]
+    [MinLength(2, ErrorMessage = "Last name is too short")]
     public string LastName { get; set; } = null!;
 
 

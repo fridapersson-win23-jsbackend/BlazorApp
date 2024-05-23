@@ -2966,6 +2966,229 @@ aside .profile-info nav .btn-transparent i {
   }
 }
 
+.account-notification-section .content .email form .header-checkbox {
+  display: flex;
+  flex-direction: column;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .header-checkbox {
+    flex-direction: row;
+  }
+}
+.account-notification-section .content .email form .header-checkbox .sign-up h5 {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .header-checkbox .sign-up h5 {
+    width: 70%;
+    text-align: left;
+    line-height: 160%;
+    font-weight: 400;
+    color: var(--color-gray-700);
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    color: var(--color-gray-900);
+    font-size: 24px !important;
+  }
+}
+@media (min-width: 992px) {
+  .account-notification-section .content .email form .header-checkbox .sign-up h5 {
+    margin: 0;
+    line-height: 160%;
+    font-weight: 400;
+    color: var(--color-gray-700);
+    font-family: "Manrope", sans-serif;
+    font-weight: 800;
+    color: var(--color-gray-900);
+    font-size: 20px !important;
+  }
+}
+.account-notification-section .content .email form .header-checkbox .box-container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  justify-content: center;
+  gap: 1rem;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .header-checkbox .box-container {
+    grid-template-columns: auto auto;
+    margin-top: 0.3rem;
+    gap: 0.8rem;
+    margin-bottom: 2rem;
+  }
+}
+@media (min-width: 992px) {
+  .account-notification-section .content .email form .header-checkbox .box-container {
+    grid-template-columns: auto auto auto;
+  }
+}
+@media (min-width: 1400px) {
+  .account-notification-section .content .email form .header-checkbox .box-container {
+    margin-right: 3rem;
+  }
+}
+.account-notification-section .content .email form .header-checkbox .box-container .box {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  border: none;
+  line-height: 160%;
+  font-weight: 400;
+  color: var(--color-gray-700);
+  font-family: "Manrope", sans-serif;
+  font-size: 12px !important;
+  color: var(--color-gray-700);
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .header-checkbox .box-container .box {
+    margin-left: 1rem;
+  }
+}
+@media (min-width: 992px) {
+  .account-notification-section .content .email form .header-checkbox .box-container .box {
+    margin: 0;
+    margin-right: 2rem;
+  }
+}
+.account-notification-section .content .email form .header-checkbox .box-container .box label {
+  margin-left: 0.5rem;
+  color: var(--color-gray-500);
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .header-checkbox .box-container .box label {
+    line-height: 160%;
+    font-weight: 400;
+    color: var(--color-gray-700);
+    font-family: "Manrope", sans-serif;
+    font-size: 12px !important;
+  }
+}
+.account-notification-section .content .email form .input-container {
+  margin-top: 1rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .input-container {
+    margin-top: 0;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    gap: 1rem;
+  }
+}
+.account-notification-section .content .email form .input-container .fa-envelope {
+  position: absolute;
+  top: 1.87rem;
+  left: 0.8rem;
+  color: var(--color-gray-500);
+}
+.account-notification-section .content .email form .input-container input {
+  width: 100%;
+  margin-top: 1rem;
+  border-radius: 0.4rem;
+  border: solid var(--color-gray-400) 1px;
+  padding: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 2.3rem;
+  color: var(--color-gray-600);
+  background: var(--color-gray-100);
+}
+.account-notification-section .content .email form .input-container input::placeholder {
+  color: var(--color-gray-500);
+}
+.account-notification-section .content .email form .input-container .error {
+  position: absolute;
+  top: -5%;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .input-container .error {
+    margin-right: 22%;
+    top: -15%;
+  }
+}
+.account-notification-section .content .email form .input-container .btn-theme {
+  width: 100%;
+  margin: 0.8rem 0;
+}
+@media (min-width: 768px) {
+  .account-notification-section .content .email form .input-container .btn-theme {
+    margin: 0;
+  }
+}
+.account-notification-section .content .email form #accountNotification .btn-switch {
+  grid-area: btn-switch;
+  justify-content: center;
+}
+@media (min-width: 992px) {
+  .account-notification-section .content .email form #accountNotification .btn-switch {
+    display: block;
+  }
+}
+#btn-switch-notifications {
+  display: flex;
+  align-items: center;
+}
+
+.color-theme-notifications {
+  margin: 0 10px;
+}
+
+.switch-notifications {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+.switch-notifications input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider-notifications {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  transition: 0.4s;
+}
+
+.slider-notifications:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  transition: 0.4s;
+}
+
+input:checked + .slider-notifications {
+  background-color: #2196F3;
+}
+
+input:checked + .slider-notifications:before {
+  transform: translateX(26px);
+}
+
+.slider-notifications.round-notifications {
+  border-radius: 34px;
+}
+
+.slider-notifications.round-notifications:before {
+  border-radius: 50%;
+}
+
 .courses {
   color: var(--color-gray-900);
   display: flex;

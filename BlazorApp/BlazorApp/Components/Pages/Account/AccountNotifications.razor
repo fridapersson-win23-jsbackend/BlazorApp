@@ -1,0 +1,120 @@
+﻿@page "/account/notifications"
+
+
+<section class="account-notification-section">
+    <div class="content">
+        <h2>Notifications</h2>
+
+        <div class="email">
+            <h5>Preferred email for notifications</h5>
+            <EditForm FormName="notificationform" Model="notificationModel" class="account-notification-form" OnValidSubmit="HandleSubmit" novalidate method="post">
+                <DataAnnotationsValidator />
+                <div class="input-container">
+                    <i class="fa-sharp fa-regular fa-envelope"></i>
+                    <InputText @bind-Value="notificationModel.Email" type="email" placeholder="example@gmail.com" />
+                    @* <span class="error" asp-validation-for="@SubscribeForm.Email"></span> *@
+                    <ValidationMessage For="@(() => notificationModel.Email)"></ValidationMessage>
+                </div>
+                <div class="header-checkbox">
+         @*            <div class="sign-up">
+                    </div> *@
+                    <div class="box-container">
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.DailyNewsletter" id="c-box-1" />
+                            <label for="c-box-1">Daily Newsletter</label>
+                        </div>
+
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.AdvertisingUpdates" id="c-box-2" />
+                            <label for="c-box-2">AdvertisingUpdates</label>
+                        </div>
+
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.WeekInReview" id="c-box-3" />
+                            <label for="c-box-3">WeekInReview</label>
+                        </div>
+
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.EventUpdates" id="c-box-4" />
+                            <label for="c-box-4">EventUpdates</label>
+                        </div>
+
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.StartupsWeekly" id="c-box-5" />
+                            <label for="c-box-5">StartupsWeekly</label>
+                        </div>
+
+                        <div class="box">
+                            <InputCheckbox @bind-Value="@notificationModel.Podcasts" id="c-box-6" />
+                            <label for="c-box-6">Podcasts</label>
+                        </div>
+                        <button type="submit" class="btn-theme">Subscribe *</button>
+
+                    </div>
+                </div>
+                
+
+
+            </EditForm>
+
+            <EditForm Model="user" FormName="Unsubscribe" OnValidSubmit="HandleUnsubscribe" novalidate>
+                <DataAnnotationsValidator />
+                <label for="accountNotifiaccountNotificationUnsubsctibecation">Unubscribe</label>
+                <InputText @bind-Value="user.Email" class="form-input" placeholder="example@gmail.com" id="accountNotificationUnsubsctibe" />
+                <button type="submit">Unsubscribe</button>
+
+            </EditForm>
+
+        </div>
+    </div>
+</section>
+
+
+
+
+@code {
+    private ApplicationUser user { get; set; } = new();
+    private AccountNotificateionFormModel? notificationModel { get; set; } = new();
+
+    private void HandleSubmit()
+    {
+        
+    }
+
+    private void HandleUnsubscribe()
+    {
+
+    }
+
+    public class AccountNotificateionFormModel
+    {
+        [Required(ErrorMessage = "You have to enter a valid email")]
+        [RegularExpression("^[^@\\s]+@[^@\\s]+\\.[^@\\s]{2,}$", ErrorMessage = "Invalid email address")]
+        [EmailAddress]
+        public string Email { get; set; } = null!;
+
+
+        [Display(Name = "Daily Newsletter")]
+        public bool DailyNewsletter { get; set; } = false;
+
+
+        [Display(Name = "Event Updates")]
+        public bool EventUpdates { get; set; } = false;
+
+
+        [Display(Name = "Advertising Updates")]
+        public bool AdvertisingUpdates { get; set; } = false;
+
+
+        [Display(Name = "Startups Weekly")]
+        public bool StartupsWeekly { get; set; } = false;
+
+
+        [Display(Name = "Week In Review")]
+        public bool WeekInReview { get; set; } = false;
+
+
+        [Display(Name = "Podcasts")]
+        public bool Podcasts { get; set; } = false;
+    }
+}

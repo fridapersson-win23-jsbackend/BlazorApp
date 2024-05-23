@@ -1,0 +1,197 @@
+﻿@page "/account/security"
+@using BlazorApp.Services
+@using BlazorProject.Models.Helpers
+
+@rendermode InteractiveServer
+@attribute [StreamRendering]
+
+
+
+@inject UserService UserService
+@inject NavigationManager NavigationManager
+@inject AuthenticationStateProvider AuthenticationStateProvider
+
+<div class="account-security-section">
+    <div class="container">
+        <div class="security-content">
+            @* @await Html.PartialAsync("~/Views/Account/Sections/_ProfileInfoPartial.cshtml", Model.ProfileInfo) *@
+            <div class="content">
+                <div class="form-content">
+                    <div class="headers">
+                        <h4>Security</h4>
+                        <h6>Password</h6>
+                    </div>
+                    @* @await Html.PartialAsync("~/Views/Account/Sections/_ChangePasswordFormPartial.cshtml") *@
+                    @* <BlazorApp.Components.Pages.Account.Components.ChangePassword /> *@
+                    <EditForm FormName="changePassword" Model="changePasswordForm" OnValidSubmit="ChangePasswordAsync" class="change-password-form" method="POST" novalidate>
+                        <DataAnnotationsValidator />
+
+                        <div class="alert-danger-dark">
+                            @ErrorMessage
+                        </div>
+                        <div class="change-password-form-content">
+                            <div>
+                                <span class="alert-success">@StatusMessage</span>
+                            </div>
+                            <div class="current-password" id="current-password">
+                                <label for="currentPassword">Current Password</label>
+                                <InputText @bind-Value="changePasswordForm.CurrentPassword" class="form-input" type="password" id="currentPassword" placeholder="Current password" />
+                                <ValidationMessage For="() => changePasswordForm.CurrentPassword" />
+                            </div>
+
+                            <div class="new-password" id="new-password">
+                                <label for="newPassword">New Password</label>
+                                <InputText @bind-Value="changePasswordForm.NewPassword" class="form-input" type="password" id="newPassword" placeholder="New password" />
+                                <ValidationMessage For="() => changePasswordForm.NewPassword" />
+                            </div>
+
+                            <div class="confirm-password" id="confirm-password">
+                                <label for="confirmPassword">Confirm Password</label>
+                                <InputText @bind-Value="changePasswordForm.ConfirmPassword" class="form-input" type="password" id="confirmPassword" placeholder="Confirm password" />
+                                <ValidationMessage For="() => changePasswordForm.ConfirmPassword" />
+                            </div>
+                        </div>
+
+                        <div class="buttons" id="buttons">
+
+                            <button class="btn-gray" type="button" onclick="location.reload();">Cancel</button>
+                            <button class="btn-theme" type="submit">Change password</button>
+
+                        </div>
+                    </EditForm>
+                </div>
+
+                <hr />
+                <div class="delete-account">
+                    <h5>Delete account</h5>
+                    <p>When you delete your account, your public profile will be deactivated immediately. If you change your mind before the 14 days are up, sign in with your email and password, and we’ll send you a link to reactivate your account.</p>
+                    @* @await Html.PartialAsync("~/Views/Account/Sections/_DeleteAccountFormPartial.cshtml") *@
+                    @* <BlazorApp.Components.Pages.Account.Components.DeleteAccount /> *@
+
+                    <EditForm Model="DeleteAccountForm" FormName="DeleteAccount" OnValidSubmit="DeleteAccountAsync" class="delete-account-form" method="POST" novalidate>
+                        <DataAnnotationsValidator />
+                        <div class="checkbox terms-and-conditions" id="checkbox" type="checkbox">
+                            <InputCheckbox @bind-Value="DeleteAccountForm.ConfirmDeleteAccount" class="form-input" type="checkbox" id="delete-account" />
+                            <label for="delete-account">Yes, I want to delete my account.</label>
+
+                            @* <span asp-validation-for="@DeleteAccountForm.ConfirmDeleteAccount"></span> *@
+                        </div>
+                        <ValidationMessage For="() => DeleteAccountForm.ConfirmDeleteAccount" />
+
+                        <button type="submit" class="delete-btn">Delete</button>
+                    </EditForm>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@* @await Html.PartialAsync("~/Views/Shared/_ValidationScriptPartial.cshtml") *@
+
+@code {
+    private string? StatusMessage;
+    private string? ErrorMessage;
+    private ApplicationUser user = new();
+    private DeleteAccountModel DeleteAccountForm { get; set; } = new();
+
+
+    [SupplyParameterFromForm]
+    private PasswordModel changePasswordForm { get; set; } = new();
+
+
+    protected override async Task OnInitializedAsync()
+    {
+        var authState = await AuthenticationStateProvider.GetAuthenticationStateAsync();
+        var userPrincipal = authState.User;
+
+        if (userPrincipal.Identity != null)
+        {
+            user = await UserManager.GetUserAsync(userPrincipal);
+        }
+
+    }
+
+
+    private async Task ChangePasswordAsync()
+    {
+        try
+        {
+            var result = await UserManager.ChangePasswordAsync(user, changePasswordForm.CurrentPassword, changePasswordForm.NewPassword);
+            if (result.Succeeded)
+            {
+                StatusMessage = "Password has been changed";
+                changePasswordForm = new();
+            }
+            else
+            {
+                ErrorMessage = "Couldn't change password";
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+
+
+    private async Task DeleteAccountAsync()
+    {
+        try
+        {
+            if (user != null)
+            {
+                var deleteUser = await UserManager.DeleteAsync(user);
+                if (deleteUser.Succeeded)
+                {
+                    StatusMessage = "Account had been deleted, navigating to homepage";
+                    NavigationManager.NavigateTo("/signout");
+                    await Task.Delay(2000);
+                }
+                else
+                {
+                    ErrorMessage = "Couldn't delete account";
+                }
+            }
+
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+    }
+
+
+    public class DeleteAccountModel
+    {
+        [Required]
+        [Display(Name = "Delete confirm")]
+        [RequiredCheckbox(ErrorMessage = "You must check the box if you want to delte your account")]
+        public bool ConfirmDeleteAccount { get; set; } = false;
+    }
+
+
+    public class PasswordModel
+    {
+        [Display(Name = "Password", Prompt = "Enter Password")]
+        [Required(ErrorMessage = "Invalid password")]
+        [RegularExpression("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()-+=])[A-Za-z\\d!@#$%^&*()-+=]{8,}$", ErrorMessage = "Invalid password")]
+        [DataType(DataType.Password)]
+        public string CurrentPassword { get; set; } = null!;
+
+
+
+        [Display(Name = "Password", Prompt = "Enter Password")]
+        [Required(ErrorMessage = "Invalid password")]
+        [RegularExpression("^(?=.*[A-Z])(?=.*\\d)(?=.*[!@#$%^&*()-+=])[A-Za-z\\d!@#$%^&*()-+=]{8,}$", ErrorMessage = "Invalid password")]
+        [DataType(DataType.Password)]
+        public string NewPassword { get; set; } = null!;
+
+
+
+        [Display(Name = "Confirm password", Prompt = "Enter password")]
+        [Required(ErrorMessage = "Invalid password")]
+        [DataType(DataType.Password)]
+        [Compare(nameof(NewPassword), ErrorMessage = "Password doesn't match")]
+        public string ConfirmPassword { get; set; } = null!;
+    }
+}

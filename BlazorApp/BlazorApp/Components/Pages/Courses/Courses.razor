@@ -146,6 +146,7 @@
             {
                 var result = await response.Content.ReadFromJsonAsync<DynamicGraphQLResponse>();
                 courses = result?.Data.GetProperty("getCourses").EnumerateArray()
+                .Where(course => !string.IsNullOrEmpty(course.GetProperty("id").GetString()))
                     .Select(course => new CourseCardModel
                     {
                         Id = course.GetProperty("id").GetString(),

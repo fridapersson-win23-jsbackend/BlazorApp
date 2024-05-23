@@ -180,16 +180,14 @@
 
     private async Task OnValidSubmitAsync()
     {
-
-
         await SignInManager.RefreshSignInAsync(user);
     }
 
 
     public async Task UpdateAccountDetailsInfo()
     {
-        var success = await UserService.UpdateUserAsync(accountDetails);
-        if(success)
+        var result = await UserService.UpdateUserAsync(accountDetails);
+        if (result)
         {
             StatusMessage = "User has been updated successfully";
         }

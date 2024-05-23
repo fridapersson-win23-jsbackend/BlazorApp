@@ -1,0 +1,230 @@
+.account-notification-section {
+    .content {
+        h2 {
+        }
+
+        .email {
+            h3 {
+            }
+
+            form {
+                .header-checkbox {
+                    display: flex;
+                    flex-direction: column;
+
+                    @include md {
+                        flex-direction: row;
+                    }
+
+                    .sign-up {
+                        h5 {
+                            text-align: center;
+                            margin-bottom: 1rem;
+
+                            @include md {
+                                width: 70%;
+                                text-align: left;
+                                @include h4;
+                            }
+
+                            @include lg {
+                                margin: 0;
+                                @include h5;
+                            }
+                        }
+                    }
+
+                    .box-container {
+                        display: grid;
+                        grid-template-columns: 1fr 1fr;
+                        justify-content: center;
+                        gap: 1rem;
+
+                        @include md {
+                            grid-template-columns: auto auto;
+                            margin-top: .3rem;
+                            gap: .8rem;
+                            margin-bottom: 2rem;
+                        }
+
+                        @include lg {
+                            grid-template-columns: auto auto auto;
+                        }
+
+                        @include xxl {
+                            margin-right: 3rem;
+                        }
+
+                        .box {
+                            display: grid;
+                            grid-template-columns: auto 1fr;
+                            align-items: center;
+                            border: none;
+                            @include text-xs;
+                            color: var(--color-gray-700);
+
+                            @include md {
+                                margin-left: 1rem;
+                            }
+
+                            @include lg {
+                                margin: 0;
+                                margin-right: 2rem;
+                            }
+
+                            label {
+                                margin-left: .5rem;
+                                color: var(--color-gray-500);
+
+                                @include md {
+                                    @include text-xs;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .input-container {
+                    margin-top: 1rem;
+                    position: relative;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+
+                    @include md {
+                        margin-top: 0;
+                        display: grid;
+                        grid-template-columns: 1fr auto;
+                        align-items: center;
+                        gap: 1rem;
+                    }
+
+                    .fa-envelope {
+                        position: absolute;
+                        top: 1.87rem;
+                        left: .8rem;
+                        color: var(--color-gray-500);
+                    }
+
+                    input {
+                        width: 100%;
+                        margin-top: 1rem;
+                        border-radius: .4rem;
+                        border: solid var(--color-gray-400) 1px;
+                        padding: .5rem;
+                        margin-bottom: 1rem;
+                        padding-left: 2.3rem;
+                        color: var(--color-gray-600);
+                        background: var(--color-gray-100);
+
+                        &::placeholder {
+                            color: var(--color-gray-500);
+                        }
+                    }
+
+                    .error {
+                        position: absolute;
+                        top: -5%;
+
+                        @include md {
+                            margin-right: 22%;
+                            top: -15%;
+                        }
+                    }
+
+                    .btn-theme {
+                        width: 100%;
+                        margin: .8rem 0;
+
+                        @include md {
+                            margin: 0;
+                        }
+                    }
+                }
+
+                #accountNotification {
+                    .btn-switch {
+                        grid-area: btn-switch;
+                        justify-content: center;
+
+                        @include lg {
+                            display: block;
+                        }
+
+                        span {
+                        }
+
+                        .switch {
+                            #switch-mode {
+                            }
+
+                            .slider-round {
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+#btn-switch-notifications {
+    display: flex;
+    align-items: center;
+}
+
+.color-theme-notifications {
+    margin: 0 10px;
+}
+
+.switch-notifications {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch-notifications input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider-notifications {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider-notifications:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider-notifications {
+    background-color: #2196F3;
+}
+
+input:checked + .slider-notifications:before {
+    transform: translateX(26px);
+}
+
+.slider-notifications.round-notifications {
+    border-radius: 34px;
+}
+
+.slider-notifications.round-notifications:before {
+    border-radius: 50%;
+}
