@@ -6,7 +6,6 @@
 @attribute [StreamRendering]
 
 
-
 @inject UserService UserService
 @inject NavigationManager NavigationManager
 @inject AuthenticationStateProvider AuthenticationStateProvider
@@ -105,7 +104,7 @@
 
         if (userPrincipal.Identity != null)
         {
-            user = await UserManager.GetUserAsync(userPrincipal);
+            user = await UserManager.GetUserAsync(userPrincipal) ?? null!;
         }
 
     }

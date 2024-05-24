@@ -48,20 +48,19 @@ public class UserService
     {
         try
         {
-            using var scope = _scopeFactory.CreateScope();
-            var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-
-            var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
-
-            if (user != null)
+            var user = await GetClaimsAsync();
+            if(user != null)
             {
-                var userId = userManager.GetUserId(user);
-                var appUser = await context.Users
-                                           .Include(u => u.Address) 
-                                           .FirstOrDefaultAsync(u => u.Id == userId);
-                return appUser!;
+                using var scope = _scopeFactory.CreateScope();
+                var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+
+                if (user != null)
+                {
+                    var userId = userManager.GetUserId(user);
+                    var applicationUser = await context.Users.Include(x => x.Address).FirstOrDefaultAsync(x => x.Id == userId);
+                    return applicationUser!;
+                }
             }
         }
         catch (Exception ex)
@@ -76,14 +75,15 @@ public class UserService
     {
         try
         {
-            using var scope = _scopeFactory.CreateScope();
-            var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
-            var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
-
-
-            if (userManager != null)
+            var userClaims = await GetClaimsAsync();
+            if (userClaims != null)
             {
-                var user = await userManager.FindByEmailAsync(accountDetails.Email);
+                using var scope = _scopeFactory.CreateScope();
+                var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+                var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+
+                var userId = userManager.GetUserId(userClaims);
+                var user = await userManager.FindByIdAsync(userId);
                 if (user != null)
                 {
                     user.FirstName = accountDetails.FirstName;
@@ -91,12 +91,11 @@ public class UserService
                     user.PhoneNumber = accountDetails.PhoneNumber;
                     user.Biography = accountDetails.Biography;
 
-                    
                     var existingAddress = await dbContext.Addresses
-                        .FirstOrDefaultAsync(a => a.AddressLine_1 == accountDetails.AddressLine_1 &&
-                                                  a.AddressLine_2 == accountDetails.AddressLine_2 &&
-                                                  a.PostalCode == accountDetails.PostalCode &&
-                                                  a.City == accountDetails.City);
+                        .FirstOrDefaultAsync(x => x.AddressLine_1 == accountDetails.AddressLine_1 &&
+                                                  x.AddressLine_2 == accountDetails.AddressLine_2 &&
+                                                  x.PostalCode == accountDetails.PostalCode &&
+                                                  x.City == accountDetails.City);
 
                     if (existingAddress != null)
                     {
@@ -129,7 +128,7 @@ public class UserService
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"ERROR: {ex.Message}");
+            Console.WriteLine($"ERROR: UpdateUserAsync() :: {ex.Message}");
         }
         return false;
     }

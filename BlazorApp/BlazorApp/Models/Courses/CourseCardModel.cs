@@ -13,5 +13,5 @@ public class CourseCardModel
     public decimal? HoursToComplete { get; set; }
     public decimal? LikesInPercent { get; set; }
     public decimal? LikesInNumber { get; set; }
-
+    public bool IsSaved { get; set; } = false;
 }

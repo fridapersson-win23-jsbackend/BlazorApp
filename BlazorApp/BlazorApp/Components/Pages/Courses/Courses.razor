@@ -1,10 +1,17 @@
 ﻿@page "/courses"
 @using BlazorApp.Models.Courses
 @using BlazorApp.Models.GraphQL
+@using BlazorApp.Services
 @using Microsoft.AspNetCore.Authorization
+@using System.Diagnostics
+@using Microsoft.EntityFrameworkCore
 
+@rendermode InteractiveServer
 @attribute [StreamRendering]
 @attribute [Authorize]
+
+@inject ApplicationDbContext Context
+@inject UserService UserService
 
 
 <PageTitle>Courses</PageTitle>
@@ -65,10 +72,14 @@
                             {
                                 <span class="best-seller text-s">Best Seller</span>
                             }
-@*                             <form asp-controller="Account" asp-action="@(course.IsSaved ? "RemoveCourseFromProfile" : "SaveCourseToProfile")">
-                                <input type="hidden" name="courseId" value="@course.Id" />
-                                <button type="submit" class="bookmark x-mark @(course.IsSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")" data-courseid="@course.Id" data-saved="@course.IsSaved"></button>
-                            </form> *@
+
+                            <button class="bookmark" type="submit" @onclick="() => ToggleBookmark(course.Id)" title="@(course.IsSaved ? "Remove" : "Add")">
+                                <i class="@(course.IsSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")"></i>
+                            </button>
+
+                            @* <a class="bookmark" @onclick:stopPropagation="@true" >
+                                <i class="fa-sharp fa-regular fa-bookmark" title="Bookmark Course"></i>
+                            </a> *@
 
                             <div class="content">
                                 <a href="/courses/@course.Id" asp-route-id="@course.Id">
@@ -133,13 +144,15 @@
 
 @code {
     private List<CourseCardModel>? courses;
+    // private bool IsSaved = false;
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var query = new GraphQLQuery { Query = "{getCourses { id isBestSeller title imageUri authors {authorName} prices {price discountedPrice } hoursToComplete likesInNumber likesInPercent }}" };
-            var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);
+            var query = new GraphQLQuery { Query = "{getCourses { id isBestSeller title imageUri authors {authorName} prices {price discountedPrice } hoursToComplete likesInNumber likesInPercent isSaved }}" };
+            var response = await Http.PostAsJsonAsync("https://courseprovider-fp-silicon.azurewebsites.net/api/graphql?code=YsfIYn4-vNUORavCIYDMl9D-Tw_DBOoebyijYgS_DTdZAzFu-Oos3w==", query);            
+            // var response = await Http.PostAsJsonAsync("http://localhost:7113/api/graphql", query);
             var responseContent = await response.Content.ReadAsStringAsync();
 
             if (response.IsSuccessStatusCode)
@@ -158,7 +171,8 @@
                         DiscountedPrice = course.GetProperty("prices").GetProperty("discountedPrice").GetDecimal(),
                         HoursToComplete = course.GetProperty("hoursToComplete").GetDecimal(),
                         LikesInNumber = course.GetProperty("likesInNumber").GetDecimal(),
-                        LikesInPercent = course.GetProperty("likesInPercent").GetDecimal()
+                        LikesInPercent = course.GetProperty("likesInPercent").GetDecimal(),
+                        IsSaved = course.GetProperty("isSaved").GetBoolean()
                     }).ToList();
             }
         }
@@ -166,5 +180,111 @@
         {
             Console.WriteLine(ex.Message);
         }
+    }
+
+    // private async Task HandleSumbmit(string courseId)
+    // {
+    //     var user = await UserService.GetUserAsync();
+    //     if(user != null)
+    //     {
+    //         var id = user.Id;
+    //         // var isCourseSavedToProfile = 
+    //     }
+    // }
+
+    private async Task ToggleBookmark(string courseId)
+    {
+        var user = await UserService.GetUserAsync();
+        if(user != null)
+        {
+            var userId = user.Id;
+
+            var isCourseSaved = IsCourseSavedToProfile(userId, courseId);
+
+            if (isCourseSaved)
+            {
+                await RemoveCourseFromProfileAsync(userId, courseId);
+            }
+            else
+            {
+                await SaveCourseToProfile(userId, courseId);
+            }
+
+            var course = courses!.FirstOrDefault(x => x.Id == courseId);
+            if (course != null)
+            {
+                course.IsSaved = !isCourseSaved;
+            }
+        }
+        StateHasChanged();
+    }
+
+    private bool IsCourseSavedToProfile(string userId, string courseId)
+    {
+        try
+        {
+            var user = Context.SavedCourses.Any(x => x.UserId == userId && x.CourseId == courseId);
+            if(user)
+            {
+                return true;
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+        return false;
+    }
+
+
+    public async Task<bool> RemoveCourseFromProfileAsync(string userId, string courseId)
+    {
+        try
+        {
+            var savedCourse = await Context.SavedCourses.FirstOrDefaultAsync(x => x.UserId == userId && x.CourseId == courseId);
+            if (savedCourse != null)
+            {
+                Context.SavedCourses.Remove(savedCourse);
+                await Context.SaveChangesAsync();
+                
+                return true;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex); }
+        return false;
+    }
+
+    public async Task<bool> SaveCourseToProfile(string userId, string courseId)
+    {
+        try
+        {
+            var exists = await Exists(userId, courseId);
+            if(!exists)
+            {
+                var savedCourse = new SavedCourseEntity
+                {
+                    UserId = userId,
+                    CourseId = courseId
+                };
+                Context.SavedCourses.Add(savedCourse);
+                await Context.SaveChangesAsync();
+                return true;
+            }
+        }
+        catch (Exception ex) { Debug.WriteLine(ex); }
+        return false;
+    }
+
+
+
+    public async Task<bool> Exists(string userId, string courseId)
+    {
+        try
+        {
+            return await Context.SavedCourses.AnyAsync(x => x.UserId == userId && x.CourseId == courseId);
+        }
+        catch (Exception ex) { Debug.WriteLine(ex); }
+        return false;
+
     }
 }

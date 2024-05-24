@@ -18,7 +18,8 @@ namespace BlazorApp.Data
 
         public int? AddressId { get; set; }
         public virtual AddressEntity? Address { get; set; }
-        
+        public ICollection<SavedCourseEntity> SavedCourses { get; set; } = new List<SavedCourseEntity>();
+
     }
 
     public class AddressEntity
