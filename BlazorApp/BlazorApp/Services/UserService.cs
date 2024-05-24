@@ -3,7 +3,10 @@ using BlazorApp.Models.Account;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using System.Diagnostics;
 using System.Security.Claims;
+
+
 
 namespace BlazorApp.Services;
 
@@ -27,11 +30,11 @@ public class UserService
         try
         {
             var authState = await _authenticationStateProvider.GetAuthenticationStateAsync();
-            if(authState != null)
+            if (authState != null)
             {
                 var user = authState.User;
 
-                if(user != null)
+                if (user != null)
                 {
                     return user;
                 }
@@ -49,7 +52,7 @@ public class UserService
         try
         {
             var user = await GetClaimsAsync();
-            if(user != null)
+            if (user != null)
             {
                 using var scope = _scopeFactory.CreateScope();
                 var context = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
@@ -132,4 +135,48 @@ public class UserService
         }
         return false;
     }
+
+
+    public async Task<List<SavedCourseEntity>> GetAllSavedCourses(ClaimsPrincipal loggedInUser)
+    {
+        try
+        {
+            var user = await GetUserAsync();
+            if (user != null)
+            {
+                var savedCoursesIds = await GetSavedCourseIdsForUserAsync(user.Id);
+                if (savedCoursesIds != null)
+                {
+                    var savedCourses = new List<SavedCourseEntity>();
+
+                    foreach (var courseId in savedCoursesIds)
+                    {
+                        savedCourses.Add(new SavedCourseEntity
+                        {
+                            UserId = user.Id,
+                            CourseId = courseId
+                        });
+                    }
+                    return savedCourses;
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Debug.WriteLine(ex.Message);
+        }
+        return new List<SavedCourseEntity>();
+    }
+
+    public async Task<List<string>> GetSavedCourseIdsForUserAsync(string userId)
+    {
+        try
+        {
+            var savedCourseIds = await _context.SavedCourses.Where(x => x.UserId == userId).Select(x => x.CourseId).ToListAsync();
+            return savedCourseIds;
+        }
+        catch(Exception ex) { Debug.WriteLine(ex.Message); }
+        return [];
+    }
+
 }
