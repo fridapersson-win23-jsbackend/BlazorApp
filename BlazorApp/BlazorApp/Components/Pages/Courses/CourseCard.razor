@@ -5,6 +5,7 @@
 @using Microsoft.EntityFrameworkCore
 
 @inject UserService UserService
+@inject CourseService CourseService
 @inject ApplicationDbContext Context
 
 
@@ -134,15 +135,15 @@ else
         {
             var userId = user.Id;
 
-            var isCourseSaved = IsCourseSavedToProfile(userId, courseId);
+            var isCourseSaved = CourseService.IsCourseSavedToProfile(userId, courseId);
 
             if (isCourseSaved)
             {
-                await RemoveCourseFromProfileAsync(userId, courseId);
+                await CourseService.RemoveCourseFromProfileAsync(userId, courseId);
             }
             else
             {
-                await SaveCourseToProfile(userId, courseId);
+                await CourseService.SaveCourseToProfile(userId, courseId);
             }
 
             var course = courses!.FirstOrDefault(x => x.Id == courseId);
@@ -154,72 +155,72 @@ else
         StateHasChanged();
     }
 
-    private bool IsCourseSavedToProfile(string userId, string courseId)
-    {
-        try
-        {
-            var user = Context.SavedCourses.Any(x => x.UserId == userId && x.CourseId == courseId);
-            if (user)
-            {
-                return true;
-            }
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine(ex.Message);
-        }
-        return false;
-    }
+    // private bool IsCourseSavedToProfile(string userId, string courseId)
+    // {
+    //     try
+    //     {
+    //         var user = Context.SavedCourses.Any(x => x.UserId == userId && x.CourseId == courseId);
+    //         if (user)
+    //         {
+    //             return true;
+    //         }
+    //     }
+    //     catch (Exception ex)
+    //     {
+    //         Console.WriteLine(ex.Message);
+    //     }
+    //     return false;
+    // }
 
 
-    public async Task<bool> RemoveCourseFromProfileAsync(string userId, string courseId)
-    {
-        try
-        {
-            var savedCourse = await Context.SavedCourses.FirstOrDefaultAsync(x => x.UserId == userId && x.CourseId == courseId);
-            if (savedCourse != null)
-            {
-                Context.SavedCourses.Remove(savedCourse);
-                await Context.SaveChangesAsync();
+    // public async Task<bool> RemoveCourseFromProfileAsync(string userId, string courseId)
+    // {
+    //     try
+    //     {
+    //         var savedCourse = await Context.SavedCourses.FirstOrDefaultAsync(x => x.UserId == userId && x.CourseId == courseId);
+    //         if (savedCourse != null)
+    //         {
+    //             Context.SavedCourses.Remove(savedCourse);
+    //             await Context.SaveChangesAsync();
 
-                return true;
-            }
-        }
-        catch (Exception ex) { Debug.WriteLine(ex); }
-        return false;
-    }
+    //             return true;
+    //         }
+    //     }
+    //     catch (Exception ex) { Debug.WriteLine(ex); }
+    //     return false;
+    // }
 
-    public async Task<bool> SaveCourseToProfile(string userId, string courseId)
-    {
-        try
-        {
-            var exists = await Exists(userId, courseId);
-            if (!exists)
-            {
-                var savedCourse = new SavedCourseEntity
-                    {
-                        UserId = userId,
-                        CourseId = courseId
-                    };
-                Context.SavedCourses.Add(savedCourse);
-                await Context.SaveChangesAsync();
-                return true;
-            }
-        }
-        catch (Exception ex) { Debug.WriteLine(ex); }
-        return false;
-    }
+    // public async Task<bool> SaveCourseToProfile(string userId, string courseId)
+    // {
+    //     try
+    //     {
+    //         var exists = await Exists(userId, courseId);
+    //         if (!exists)
+    //         {
+    //             var savedCourse = new SavedCourseEntity
+    //                 {
+    //                     UserId = userId,
+    //                     CourseId = courseId
+    //                 };
+    //             Context.SavedCourses.Add(savedCourse);
+    //             await Context.SaveChangesAsync();
+    //             return true;
+    //         }
+    //     }
+    //     catch (Exception ex) { Debug.WriteLine(ex); }
+    //     return false;
+    // }
 
 
 
-    public async Task<bool> Exists(string userId, string courseId)
-    {
-        try
-        {
-            return await Context.SavedCourses.AnyAsync(x => x.UserId == userId && x.CourseId == courseId);
-        }
-        catch (Exception ex) { Debug.WriteLine(ex); }
-        return false;
+    // public async Task<bool> Exists(string userId, string courseId)
+    // {
+    //     try
+    //     {
+    //         return await Context.SavedCourses.AnyAsync(x => x.UserId == userId && x.CourseId == courseId);
+    //     }
+    //     catch (Exception ex) { Debug.WriteLine(ex); }
+    //     return false;
 
-    }
+    // }
 }

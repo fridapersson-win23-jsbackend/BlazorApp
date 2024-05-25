@@ -20,6 +20,7 @@ builder.Services.AddHttpClient();
 
 builder.Services.AddSingleton<ServiceBusService>();
 builder.Services.AddScoped<UserService>();
+builder.Services.AddScoped<CourseService>();
 
 
 
