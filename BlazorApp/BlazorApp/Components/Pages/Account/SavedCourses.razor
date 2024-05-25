@@ -17,69 +17,104 @@
 }
 else
 {
-    
 
-<div class="box-content">
-        <div class="boxes" id="boxes">
-            @foreach (var course in courses!)
-            {
-                if(course.IsSaved)
-                {
-                    <div class="box">
-                        @if (course.IsBestSeller)
-                        {
-                            <span class="best-seller text-s">Best Seller</span>
-                        }
+    <div class="account-details-section">
+    <div class="container">
+        <div class="saved-courses-content">
+            @* @await Html.PartialAsync("~/Views/Account/Sections/_ProfileInfoPartial.cshtml", Model.ProfileInfo) *@
 
-                        <button class="bookmark" type="submit" @onclick="() => ToggleBookmark(course.Id!)" title="@(course.IsSaved ? "Remove" : "Add")">
-                            <i class="@(course.IsSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")"></i>
-                        </button>
+            <div class="saved-courses">
+                <div class="header">
+                    <h2>Saved Courses</h2>
 
-                        @* <a class="bookmark" @onclick:stopPropagation="@true" >
-            <i class="fa-sharp fa-regular fa-bookmark" title="Bookmark Course"></i>
-            </a> *@
+                        <a @onclick="() => RemoveAllCoursesFromProfile()" class="remove-all-courses" asp-controller="Account" asp-action="RemoveAllSavedCourses"><i class="fa-light fa-trash"></i> Delete All</a>
+                </div>
 
-                        <div class="content">
-                            <a href="/courses/@course.Id" asp-route-id="@course.Id">
-                                <img src="@course.ImageUri" />
-                                <p class="h5">@course.Title</p>
+                    <div class="box-content">
+                        <div class="boxes" id="boxes">
+                            @foreach (var course in courses!)
+                            {
+                                if (course.IsSaved)
+                                {
+                                    <div class="box">
+                                        @if (course.IsBestSeller)
+                                        {
+                                            <span class="best-seller text-s">Best Seller</span>
+                                        }
 
-                                <p class="text-s">By @course.Author</p>
-                                <div class="extra-price">
-                                    @if (course.DiscountedPrice == 0)
-                                    {
-                                        <p class="price">$@course.Price</p>
-                                    }
-                                    else
-                                    {
-                                        <p class="new-price">$@course.DiscountedPrice</p>
-                                        <span class="old-price">$@course.Price</span>
-                                    }
-                                </div>
+                                        <button class="bookmark" type="submit" @onclick="() => HandleBookmark(course.Id!)" title="@(course.IsSaved ? "Remove" : "Add")">
+                                            <i class="@(course.IsSaved ? "fa-solid fa-bookmark" : "fa-regular fa-bookmark")"></i>
+                                        </button>
 
-                                <div class="line"></div>
+                                        @* <a class="bookmark" @onclick:stopPropagation="@true" >
+                            <i class="fa-sharp fa-regular fa-bookmark" title="Bookmark Course"></i>
+                            </a> *@
 
-                                <div class="bottom-info">
-                                    <div class="hours">
-                                        <i class="fa-light fa-clock"></i>
-                                        <p>@course.HoursToComplete hours</p>
+                                        <div class="content">
+                                            <a href="/courses/@course.Id" asp-route-id="@course.Id">
+                                                <img src="@course.ImageUri" />
+                                                <p class="h5">@course.Title</p>
+
+                                                <p class="text-s">By @course.Author</p>
+                                                <div class="extra-price">
+                                                    @if (course.DiscountedPrice == 0)
+                                                    {
+                                                        <p class="price">$@course.Price</p>
+                                                    }
+                                                    else
+                                                    {
+                                                        <p class="new-price">$@course.DiscountedPrice</p>
+                                                        <span class="old-price">$@course.Price</span>
+                                                    }
+                                                </div>
+
+                                                <div class="line"></div>
+
+                                                <div class="bottom-info">
+                                                    <div class="hours">
+                                                        <i class="fa-light fa-clock"></i>
+                                                        <p>@course.HoursToComplete hours</p>
+                                                    </div>
+                                                    <div class="likes">
+                                                        <i class="fa-light fa-thumbs-up"></i>
+                                                        <p>
+                                                            @($"{course.LikesInPercent}%")
+                                                            (@($"{course.LikesInNumber}K"))
+
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </a>
+                                        </div>
                                     </div>
-                                    <div class="likes">
-                                        <i class="fa-light fa-thumbs-up"></i>
-                                        <p>
-                                            @($"{course.LikesInPercent}%")
-                                            (@($"{course.LikesInNumber}K"))
-
-                                        </p>
-                                    </div>
-                                </div>
-                            </a>
+                                }
+                            }
                         </div>
                     </div>
+
+@*                 @if (Model.SavedCourses != null && Model.SavedCourses.Any())
+                {
+                    <div class="box-content">
+
+                        <div class="boxes">
+                            @foreach(var course in Model.SavedCourses)
+                            {
+                                @await Html.PartialAsync("~/Views/Courses/Components/_CourseCardPartial.cshtml", course)
+                            }
+                        </div
+                    </div>
                 }
-            }
+                else
+                {
+                    <p>You don't have any saved courses yet.</p>
+                } *@
+            </div>
         </div>
     </div>
+</div>
+    
+
+
 }
 @* else
 {
@@ -139,7 +174,7 @@ else
         }
 
     }
-    private async Task ToggleBookmark(string courseId)
+    private async Task HandleBookmark(string courseId)
     {
         var user = await UserService.GetUserAsync();
         if (user != null)
@@ -161,6 +196,11 @@ else
             if (course != null)
             {
                 course.IsSaved = !isCourseSaved;
+            }
+
+            if(!courses!.Any(x => x.IsSaved))
+            {
+                courses = null!;
             }
         }
         StateHasChanged();
@@ -220,6 +260,32 @@ else
         }
         catch (Exception ex) { Debug.WriteLine(ex); }
         return false;
+    }
+
+    public async Task RemoveAllCoursesFromProfile()
+    {
+        try
+        {
+            var user = await UserService.GetUserAsync();
+            if(user != null)
+            {
+                var userId = user.Id;
+                var savedCourses = Context.SavedCourses.Where(x => x.UserId == userId);
+                if(savedCourses != null)
+                {
+                    Context.SavedCourses.RemoveRange(savedCourses);
+                    await Context.SaveChangesAsync();
+
+                    courses = null!;
+                    StateHasChanged();
+                }
+            }
+        }
+        catch(Exception ex)
+        {
+            Console.WriteLine(ex.Message);
+        }
+
     }
 
 
