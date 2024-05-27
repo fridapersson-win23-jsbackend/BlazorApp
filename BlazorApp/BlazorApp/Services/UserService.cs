@@ -134,7 +134,7 @@ public class UserService
 
                 var httpContent = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
 
-                var result = await _http.PostAsync()
+                //var result = await _http.PostAsync()
 
             }
         }
