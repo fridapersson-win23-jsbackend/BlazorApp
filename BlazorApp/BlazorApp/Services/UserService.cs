@@ -3,8 +3,10 @@ using BlazorApp.Models.Account;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 using System.Diagnostics;
 using System.Security.Claims;
+using System.Text;
 
 
 
@@ -16,13 +18,15 @@ public class UserService
     private readonly AuthenticationStateProvider _authenticationStateProvider;
     private readonly ApplicationDbContext _context;
     private readonly UserManager<ApplicationUser> _userManager;
+    private readonly HttpClient _http;
 
-    public UserService(IServiceScopeFactory scopeFactory, AuthenticationStateProvider authenticationStateProvider, ApplicationDbContext context, UserManager<ApplicationUser> userManager)
+    public UserService(IServiceScopeFactory scopeFactory, AuthenticationStateProvider authenticationStateProvider, ApplicationDbContext context, UserManager<ApplicationUser> userManager, HttpClient http)
     {
         _scopeFactory = scopeFactory;
         _authenticationStateProvider = authenticationStateProvider;
         _context = context;
         _userManager = userManager;
+        _http = http;
     }
 
     public async Task<ClaimsPrincipal> GetClaimsAsync()
@@ -114,19 +118,24 @@ public class UserService
                             City = accountDetails.City
                         };
 
-                        dbContext.Addresses.Add(newAddress);
-                        await dbContext.SaveChangesAsync();
+                        //dbContext.Addresses.Add(newAddress);
+                        //await dbContext.SaveChangesAsync();
 
-                        user.AddressId = newAddress.Id;
+                        //user.AddressId = newAddress.Id;
                     }
 
-                    var result = await userManager.UpdateAsync(user);
-                    return result.Succeeded;
+                    //var result = await userManager.UpdateAsync(user);
+                    //return result.Succeeded;
                 }
                 else
                 {
                     Console.WriteLine("User not found");
                 }
+
+                var httpContent = new StringContent(JsonConvert.SerializeObject(user), Encoding.UTF8, "application/json");
+
+                var result = await _http.PostAsync()
+
             }
         }
         catch (Exception ex)

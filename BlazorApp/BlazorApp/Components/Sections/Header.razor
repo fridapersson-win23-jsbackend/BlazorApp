@@ -25,10 +25,11 @@
                 <NavLink href="/contact" class="menu-link">Contact</NavLink>
 
 
-                @*@if(User.IsInRole("Admin"))
-                {
-                <NavLink class="menu-link" asp-controller="Admin" asp-action="Index" asp-fragment="courses">Admin Portal</NavLink>
-                } *@
+                <AuthorizeView Roles="Admin">
+                    <Authorized>
+                        <NavLink href="https://localhost:7032/" class="menu-link">Admin</NavLink>
+                    </Authorized>
+                </AuthorizeView>
             </nav>
         </div>
 
